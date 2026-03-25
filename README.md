@@ -1,4 +1,4 @@
-## 📌 About the Project
+## 📌 About the Project edu-platform-frontend
 
 Edu Platform is a scalable and modular **school management system** built to handle multi-level user access, including **students, school administrators, and system administrators**.
 
