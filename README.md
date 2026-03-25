@@ -149,10 +149,3 @@ npm run lint       # Run ESLint
 - Always create a **feature branch + PR** (no direct push to main)
 
 ---
-
-## 🔮 Future Improvements
-
-- ✅ Form validation (React Hook Form + Zod)
-- ✅ Global error & toast handling
-- ✅ Unit & integration testing
-- ✅ CI/CD pipeline (GitH)
