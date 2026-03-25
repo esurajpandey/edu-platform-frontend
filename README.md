@@ -1,19 +1,19 @@
 # 🎓 Edu Platform – Frontend
 
-Frontend application for the **Edu Platform**, a scalable school management system designed to handle multiple user roles such as **Students, School Admins, and System Administrators**.
+Frontend application for the **Edu Platform**, a scalable school management system designed to manage **students, schools, and system-level operations** with role-based access.
 
-This project is built using **Next.js** and focuses on performance, scalability, and clean architecture suitable for production-grade applications.
+This project is built using **Next.js** with a focus on clean architecture, maintainability, and production-ready practices.
 
 ---
 
 ## 🚀 Tech Stack
 
 - **Framework:** Next.js (App Router)
-- **Language:** TypeScript (recommended)
-- **State Management:** Context API / Zustand (optional)
+- **Language:** TypeScript
 - **Styling:** Tailwind CSS
-- **API Communication:** Axios / Fetch API
-- **Authentication:** JWT / Session-based (via backend)
+- **State Management:** Context API / Zustand
+- **API Layer:** Axios / Fetch
+- **Linting & Formatting:** ESLint + Prettier
 
 ---
 
@@ -22,23 +22,25 @@ This project is built using **Next.js** and focuses on performance, scalability,
 ```
 edu-platform-frontend/
 │
-├── public/                # Static assets
+├── public/                # Static assets (images, icons, etc.)
 ├── src/
-│   ├── app/               # Next.js App Router
-│   │   ├── (auth)/        # Login / Signup routes
+│   ├── app/               # App router (pages & layouts)
+│   │   ├── (auth)/        # Authentication routes (login, signup)
 │   │   ├── dashboard/     # Role-based dashboards
-│   │   ├── layout.tsx
-│   │   └── page.tsx
+│   │   ├── layout.tsx     # Root layout
+│   │   └── page.tsx       # Landing page
 │   │
 │   ├── components/        # Reusable UI components
-│   ├── services/          # API calls
-│   ├── store/             # State management
+│   ├── services/          # API integration layer
+│   ├── store/             # Global state
 │   ├── hooks/             # Custom hooks
-│   ├── utils/             # Helper functions
-│   └── types/             # TypeScript types
+│   ├── utils/             # Utility functions
+│   ├── constants/         # App-wide constants
+│   └── types/             # Type definitions
 │
 ├── .env.local             # Environment variables
 ├── next.config.js
+├── tsconfig.json
 └── package.json
 ```
 
@@ -46,7 +48,7 @@ edu-platform-frontend/
 
 ## ⚙️ Getting Started
 
-### 1. Clone the repository
+### 1. Clone repository
 
 ```
 git clone https://github.com/your-username/edu-platform-frontend.git
@@ -59,13 +61,13 @@ cd edu-platform-frontend
 npm install
 ```
 
-### 3. Run the development server
+### 3. Run development server
 
 ```
 npm run dev
 ```
 
-App will be running at:
+App runs at:
 
 ```
 http://localhost:3000
@@ -75,7 +77,7 @@ http://localhost:3000
 
 ## 🔐 Environment Variables
 
-Create a `.env.local` file:
+Create `.env.local`:
 
 ```
 NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api
@@ -83,31 +85,32 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api
 
 ---
 
-## 👥 Roles Supported
+## 👥 Supported Roles
 
 - 👨‍🎓 Student
 - 🏫 School Admin
 - 🛠️ System Admin
 
-Each role will have **separate dashboards and permissions**, managed via backend-driven access control.
+Access and permissions are controlled via backend-driven **RBAC (Role-Based Access Control)**.
 
 ---
 
-## 🔄 API Integration
+## 🔄 API Handling
 
-All API calls are handled inside:
+All API calls are centralized in:
 
 ```
 src/services/
 ```
 
-Example:
+Example setup:
 
 ```js
 import axios from "axios";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  withCredentials: true,
 });
 
 export default api;
@@ -115,53 +118,41 @@ export default api;
 
 ---
 
-## 🧠 Key Features (Planned)
+## 🎯 Key Features
 
-- 🔐 Authentication & Authorization (RBAC)
+- 🔐 Authentication (Login / Signup / Session handling)
+- 🧩 Modular and scalable folder structure
 - 📊 Role-based dashboards
-- 🏫 School & student management
-- 📅 Scheduling & attendance
-- 💰 Fees & reports
-- ⚡ Optimized performance with SSR/ISR
+- ⚡ Optimized rendering (SSR / ISR ready)
+- 🔁 Centralized API handling
+- 🧠 Clean separation of concerns
 
 ---
 
-## 🧪 Scripts
+## 🧪 Available Scripts
 
 ```
-npm run dev      # Start development server
-npm run build    # Build for production
-npm run start    # Start production server
-npm run lint     # Lint code
+npm run dev        # Start dev server
+npm run build      # Production build
+npm run start      # Run production build
+npm run lint       # Run ESLint
 ```
 
 ---
 
-## 📌 Future Improvements
+## 📌 Development Guidelines
 
-- Add unit & integration tests
-- Setup CI/CD pipeline
-- Implement global error handling
-- Improve accessibility (a11y)
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome. Please follow proper branch naming and PR guidelines.
+- Use **feature-based folder structure** where needed
+- Keep components **small and reusable**
+- Avoid hardcoding values → use constants/env
+- Write meaningful commit messages
+- Always create a **feature branch + PR** (no direct push to main)
 
 ---
 
-## 📄 License
+## 🔮 Future Improvements
 
-This project is licensed under the MIT License.
-
----
-
-## 💡 Note
-
-This project is part of a full-stack system:
-
-- Backend repository: `edu-platform-backend` (to be linked)
-
----
+- ✅ Form validation (React Hook Form + Zod)
+- ✅ Global error & toast handling
+- ✅ Unit & integration testing
+- ✅ CI/CD pipeline (GitH
