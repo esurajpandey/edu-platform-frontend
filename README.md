@@ -5,3 +5,8 @@ Edu Platform is a scalable and modular **school management system** built to han
 The application is designed with a **production-grade architecture**, focusing on maintainability, performance, and secure access control. It enables institutions to efficiently manage academic workflows, user data, and operational processes within a single platform.
 
 The frontend is developed using modern web technologies and integrates seamlessly with backend services to deliver a responsive and efficient user experience.
+
+Tech
+
+1. Next js
+2. Zustand
