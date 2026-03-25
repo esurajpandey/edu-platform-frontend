@@ -147,5 +147,3 @@ npm run lint       # Run ESLint
 - Avoid hardcoding values → use constants/env
 - Write meaningful commit messages
 - Always create a **feature branch + PR** (no direct push to main)
-
----
