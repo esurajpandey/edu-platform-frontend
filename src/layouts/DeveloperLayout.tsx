@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Icon } from "@/components";
+import { EduPlatformLogo, Icon } from "@/components";
 import { getMenuByRole } from "@/constants/routes";
 
 export default function DeveloperLayout({ children }: { children: ReactNode }) {
@@ -13,8 +13,14 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="h-screen overflow-hidden bg-base text-text">
-      <header className="flex h-16 items-center border-b border-surfaceSoft bg-surface px-4">
-        <h1 className="text-sm font-semibold text-text">Edu Platform</h1>
+      <header className="flex h-16 items-center justify-between border-b border-surfaceSoft bg-surface px-4">
+        <div className="flex items-center gap-3">
+          <EduPlatformLogo />
+          <div>
+            <h1 className="text-sm font-semibold text-text">Edu Platform</h1>
+            <p className="text-[11px] text-textLight">Developer workspace</p>
+          </div>
+        </div>
       </header>
 
       <div className="flex h-[calc(100vh-40px)]">
