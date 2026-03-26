@@ -14,10 +14,10 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
   const menu = getMenuByRole(role);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-base text-text">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r hidden md:flex flex-col">
-        <div className="p-4 text-xl font-bold border-b">Dev Panel</div>
+      <aside className="hidden w-64 flex-col border-r border-surfaceSoft bg-surface md:flex">
+        <div className="border-b border-surfaceSoft p-4 text-xl font-bold">Dev Panel</div>
 
         <nav className="flex-1 p-4 space-y-2">
           {menu.map((item) => {
@@ -28,9 +28,7 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
                 key={item.path}
                 href={item.path}
                 className={`block px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  isActive
-                    ? "bg-blue-500 text-white"
-                    : "text-gray-700 hover:bg-gray-200"
+                  isActive ? "bg-primary text-surface" : "text-textLight hover:bg-surfaceSoft"
                 }`}
               >
                 {item.name}
@@ -41,8 +39,8 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
       </aside>
 
       {/* Main */}
-      <div className="flex-1 flex flex-col">
-        <header className="h-16 bg-white border-b flex items-center justify-between px-6">
+      <div className="flex flex-1 flex-col">
+        <header className="flex h-16 items-center justify-between border-b border-surfaceSoft bg-surface px-6">
           <h1 className="text-lg font-semibold">Developer</h1>
         </header>
 

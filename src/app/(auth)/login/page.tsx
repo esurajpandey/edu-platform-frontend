@@ -1,9 +1,9 @@
 export default function LoginPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="p-8 bg-white rounded-2xl shadow-md text-center">
+    <div className="flex min-h-screen items-center justify-center bg-base text-text">
+      <div className="rounded-2xl bg-surface p-8 text-center shadow-md">
         <h1 className="text-2xl font-bold mb-2">Login Page</h1>
-        <p className="text-gray-500">Initial setup working 🚀</p>
+        <p className="text-textMuted">Initial setup working 🚀</p>
       </div>
     </div>
   );

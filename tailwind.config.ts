@@ -4,20 +4,23 @@ const config: Config = {
   darkMode: "class",
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {
-      colors: {
-        primary: "#5B6CFF",
-        primaryDark: "#4A5BE6",
-        primaryLight: "#7C8AFF",
+    // Keep a strict semantic palette so random Tailwind colors are unavailable.
+    colors: {
+      transparent: "transparent",
+      current: "currentColor",
+      inherit: "inherit",
 
-        base: "#F5F7FB" /* main page background */,
-        surface: "#FFFFFF" /* cards / forms */,
-        surfaceSoft: "#EEF1F7" /* subtle sections */,
+      primary: "#5B6CFF",
+      primaryDark: "#4A5BE6",
+      primaryLight: "#7C8AFF",
 
-        text: "#1F2937" /* main heading */,
-        textLight: "#6B7280" /* secondary text */,
-        textMuted: "#9CA3AF" /* placeholder / hint */,
-      },
+      base: "#F5F7FB" /* main page background */,
+      surface: "#FFFFFF" /* cards / forms */,
+      surfaceSoft: "#EEF1F7" /* subtle sections */,
+
+      text: "#1F2937" /* main heading */,
+      textLight: "#6B7280" /* secondary text */,
+      textMuted: "#9CA3AF" /* placeholder / hint */,
     },
   },
 

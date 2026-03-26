@@ -8,11 +8,7 @@ export const metadata: Metadata = {
   keywords: ["school", "management", "education", "admin", "students"],
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
