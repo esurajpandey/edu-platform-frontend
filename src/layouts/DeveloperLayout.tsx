@@ -7,44 +7,46 @@ import { getMenuByRole } from "@/constants/routes";
 
 export default function DeveloperLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-
-  // 👉 later this should come from auth store / token
   const role = "developer";
-
   const menu = getMenuByRole(role);
 
   return (
-    <div className="flex h-screen bg-base text-text">
-      {/* Sidebar */}
-      <aside className="hidden w-64 flex-col border-r border-surfaceSoft bg-surface md:flex">
-        <div className="border-b border-surfaceSoft p-4 text-xl font-bold">Dev Panel</div>
+    <div className="h-screen overflow-hidden bg-base text-text">
+      <header className="flex h-16 items-center border-b border-surfaceSoft bg-surface px-4">
+        <h1 className="text-sm font-semibold text-text">Edu Platform</h1>
+      </header>
 
-        <nav className="flex-1 p-4 space-y-2">
-          {menu.map((item) => {
-            const isActive = pathname === item.path;
+      <div className="flex h-[calc(100vh-40px)]">
+        <aside className="flex h-full w-[300px] shrink-0 flex-col border-r border-surfaceSoft bg-surface">
+          <div className="border-b border-surfaceSoft px-5 py-4">
+            <p className="text-sm font-semibold text-text">Developer</p>
+            <p className="mt-1 text-xs text-textLight">Admin Control</p>
+          </div>
 
-            return (
-              <Link
-                key={item.path}
-                href={item.path}
-                className={`block px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  isActive ? "bg-primary text-surface" : "text-textLight hover:bg-surfaceSoft"
-                }`}
-              >
-                {item.name}
-              </Link>
-            );
-          })}
-        </nav>
-      </aside>
+          <nav className="flex-1 space-y-2 overflow-y-auto p-4">
+            {menu.map((item) => {
+              const isActive = pathname === item.path;
 
-      {/* Main */}
-      <div className="flex flex-1 flex-col">
-        <header className="flex h-16 items-center justify-between border-b border-surfaceSoft bg-surface px-6">
-          <h1 className="text-lg font-semibold">Developer</h1>
-        </header>
+              return (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={`block rounded-xl border px-4 py-3 text-sm font-medium transition ${
+                    isActive
+                      ? "border-primary bg-primary text-surface shadow-sm"
+                      : "border-transparent text-textLight hover:border-surfaceSoft hover:bg-base hover:text-text"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
+          </nav>
+        </aside>
 
-        <main className="flex-1 p-6 overflow-auto">{children}</main>
+        <main className="flex-1 overflow-auto p-6">
+          <div className="">{children}</div>
+        </main>
       </div>
     </div>
   );

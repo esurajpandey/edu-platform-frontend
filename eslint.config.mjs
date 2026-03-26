@@ -6,11 +6,16 @@ const COLOR_UTILITY_PREFIX =
   "(?:bg|text|border|from|to|via|ring|stroke|fill|outline|decoration|caret|accent)";
 const TAILWIND_DEFAULT_COLOR =
   "(?:black|white|slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)(?:-[0-9]{2,3})?";
+const SEMANTIC_COLOR =
+  "(?:transparent|current|inherit|primary|primaryDark|primaryLight|base|surface|surfaceSoft|text|textLight|textMuted|danger)(?:\\/[0-9]{1,3})?";
 const DEFAULT_COLOR_CLASS_RE = new RegExp(
   `\\b${COLOR_UTILITY_PREFIX}-${TAILWIND_DEFAULT_COLOR}\\b`,
 );
 const ARBITRARY_COLOR_CLASS_RE = new RegExp(
   `\\b${COLOR_UTILITY_PREFIX}-\\[(?:#|rgb|hsl|oklch)[^\\]]*\\]`,
+);
+const UNKNOWN_COLOR_UTILITY_RE = new RegExp(
+  `\\b(?:bg|from|to|via|ring|stroke|fill|outline|decoration|caret|accent)-(?!(?:${SEMANTIC_COLOR})\\b)[A-Za-z][A-Za-z0-9-]*(?:\\/[0-9]{1,3})?\\b`,
 );
 
 const tailwindColorRestrictionPlugin = {
@@ -76,12 +81,13 @@ const tailwindColorRestrictionPlugin = {
 
               if (
                 ARBITRARY_COLOR_CLASS_RE.test(classText) ||
-                DEFAULT_COLOR_CLASS_RE.test(classText)
+                DEFAULT_COLOR_CLASS_RE.test(classText) ||
+                UNKNOWN_COLOR_UTILITY_RE.test(classText)
               ) {
                 context.report({
                   node: classValueNode,
                   message:
-                    "Use semantic colors from tailwind.config.ts only (primary/base/surface/text palette).",
+                    "Use semantic colors defined in src/app/globals.css @theme only.",
                 });
               }
             }
