@@ -1,32 +1,28 @@
+import { MenuItem } from "@/types";
 import { Role } from "./roles";
-
-export type MenuItem = {
-  name: string;
-  path: string;
-};
 
 const ROUTE_CONFIG: Record<Role, MenuItem[]> = {
   developer: [
-    { name: "Dashboard", path: "/dashboard" },
-    { name: "Schools", path: "/schools" },
+    { name: "Dashboard", path: "/dashboard", icon: "search" },
+    { name: "Schools", path: "/schools", icon: "plus" },
   ],
 
   "school-admin": [
-    { name: "Dashboard", path: "/admin/dashboard" },
-    { name: "Students", path: "/admin/students" },
-    { name: "Teachers", path: "/admin/teachers" },
-    { name: "Fees", path: "/admin/fees" },
+    { name: "Dashboard", path: "/admin/dashboard", icon: "search" },
+    { name: "Students", path: "/admin/students", icon: "plus" },
+    { name: "Teachers", path: "/admin/teachers", icon: "plus" },
+    { name: "Fees", path: "/admin/fees", icon: "plus" },
   ],
 
   teacher: [
-    { name: "Dashboard", path: "/teacher/dashboard" },
-    { name: "Attendance", path: "/teacher/attendance" },
-    { name: "Exams", path: "/teacher/exams" },
+    { name: "Dashboard", path: "/teacher/dashboard", icon: "search" },
+    { name: "Attendance", path: "/teacher/attendance", icon: "plus" },
+    { name: "Exams", path: "/teacher/exams", icon: "plus" },
   ],
 
   student: [
-    { name: "Dashboard", path: "/student/dashboard" },
-    { name: "Results", path: "/student/results" },
+    { name: "Dashboard", path: "/student/dashboard", icon: "search" },
+    { name: "Results", path: "/student/results", icon: "plus" },
   ],
 };
 

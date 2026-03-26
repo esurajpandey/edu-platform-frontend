@@ -3,6 +3,7 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Icon } from "@/components";
 import { getMenuByRole } from "@/constants/routes";
 
 export default function DeveloperLayout({ children }: { children: ReactNode }) {
@@ -31,13 +32,20 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`block rounded-xl border px-4 py-3 text-sm font-medium transition ${
+                  className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-sm font-medium transition ${
                     isActive
                       ? "border-primary bg-primary text-surface shadow-sm"
                       : "border-transparent text-textLight hover:border-surfaceSoft hover:bg-base hover:text-text"
                   }`}
                 >
-                  {item.name}
+                  {item.icon ? (
+                    <Icon
+                      name={item.icon}
+                      size="small"
+                      color={isActive ? "surface" : "textLight"}
+                    />
+                  ) : null}
+                  <span>{item.name}</span>
                 </Link>
               );
             })}
