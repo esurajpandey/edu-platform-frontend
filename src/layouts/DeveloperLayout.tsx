@@ -3,50 +3,64 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { EduPlatformLogo, Icon } from "@/components";
 import { getMenuByRole } from "@/constants/routes";
 
 export default function DeveloperLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-
-  // 👉 later this should come from auth store / token
   const role = "developer";
-
   const menu = getMenuByRole(role);
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r hidden md:flex flex-col">
-        <div className="p-4 text-xl font-bold border-b">Dev Panel</div>
+    <div className="h-screen overflow-hidden bg-base text-text">
+      <header className="flex h-16 items-center justify-between border-b border-surfaceSoft bg-surface px-4">
+        <div className="flex items-center gap-3">
+          <EduPlatformLogo />
+          <div>
+            <h1 className="text-sm font-semibold text-text">Edu Platform</h1>
+            <p className="text-[11px] text-textLight">Developer workspace</p>
+          </div>
+        </div>
+      </header>
 
-        <nav className="flex-1 p-4 space-y-2">
-          {menu.map((item) => {
-            const isActive = pathname === item.path;
+      <div className="flex h-[calc(100vh-40px)]">
+        <aside className="flex h-full w-[300px] shrink-0 flex-col border-r border-surfaceSoft bg-surface">
+          <div className="border-b border-surfaceSoft px-5 py-4">
+            <p className="text-sm font-semibold text-text">Developer</p>
+            <p className="mt-1 text-xs text-textLight">Admin Control</p>
+          </div>
 
-            return (
-              <Link
-                key={item.path}
-                href={item.path}
-                className={`block px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  isActive
-                    ? "bg-blue-500 text-white"
-                    : "text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {item.name}
-              </Link>
-            );
-          })}
-        </nav>
-      </aside>
+          <nav className="flex-1 space-y-2 overflow-y-auto p-4">
+            {menu.map((item) => {
+              const isActive = pathname === item.path;
 
-      {/* Main */}
-      <div className="flex-1 flex flex-col">
-        <header className="h-16 bg-white border-b flex items-center justify-between px-6">
-          <h1 className="text-lg font-semibold">Developer</h1>
-        </header>
+              return (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-sm font-medium transition ${
+                    isActive
+                      ? "border-primary bg-primary text-surface shadow-sm"
+                      : "border-transparent text-textLight hover:border-surfaceSoft hover:bg-base hover:text-text"
+                  }`}
+                >
+                  {item.icon ? (
+                    <Icon
+                      name={item.icon}
+                      size="small"
+                      color={isActive ? "surface" : "textLight"}
+                    />
+                  ) : null}
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </nav>
+        </aside>
 
-        <main className="flex-1 p-6 overflow-auto">{children}</main>
+        <main className="flex-1 overflow-auto p-6">
+          <div className="">{children}</div>
+        </main>
       </div>
     </div>
   );

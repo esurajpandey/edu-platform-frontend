@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-inherit: inherit;
+
+  --color-primary: #5b6cff;
+  --color-primaryDark: #4a5be6;
+  --color-primaryLight: #7c8aff;
+
+  --color-base: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-surfaceSoft: #eef1f7;
+
+  --color-text: #1f2937;
+  --color-textLight: #6b7280;
+  --color-textMuted: #9ca3af;
+
+  --color-danger: #ef4444;
+}
