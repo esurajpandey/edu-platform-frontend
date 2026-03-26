@@ -5,6 +5,7 @@ import Providers from "@/lib/providers";
 export const metadata: Metadata = {
   title: "Edu Platform",
   description: "School Management System",
+  keywords: ["school", "management", "education", "admin", "students"],
 };
 
 export default function RootLayout({
@@ -13,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>{children}</Providers>
       </body>
