@@ -193,27 +193,33 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
                 </button>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
-                {utilityActions.map((action) => (
-                  <button
-                    key={action.label}
-                    type="button"
-                    className="flex items-center gap-2 rounded-2xl border border-surfaceSoft bg-surface px-4 py-2.5 text-sm font-medium text-textLight transition hover:border-primary hover:text-primary"
-                  >
-                    <Icon name={action.icon} size="small" color="textLight" />
-                    <span>{action.label}</span>
-                  </button>
-                ))}
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+                <div className="flex items-center gap-2 rounded-[24px] border border-surfaceSoft bg-surface p-1.5 shadow-sm sm:contents sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
+                  {utilityActions.map((action) => (
+                    <button
+                      key={action.label}
+                      type="button"
+                      className="flex h-11 w-11 items-center justify-center rounded-2xl text-textLight transition hover:bg-base hover:text-primary sm:h-auto sm:w-auto sm:gap-2 sm:border sm:border-surfaceSoft sm:bg-surface sm:px-4 sm:py-2.5 sm:text-sm sm:font-medium sm:hover:border-primary"
+                      aria-label={action.label}
+                      title={action.label}
+                    >
+                      <Icon name={action.icon} size="small" color="textLight" />
+                      <span className="hidden sm:inline">{action.label}</span>
+                    </button>
+                  ))}
+                </div>
 
                 <button
                   type="button"
-                  className="flex items-center gap-3 rounded-[22px] border border-surfaceSoft bg-surface px-3 py-2.5 transition hover:border-primary"
+                  className="flex w-full items-center gap-3 rounded-[24px] border border-surfaceSoft bg-surface px-3 py-3 shadow-sm transition hover:border-primary sm:w-auto sm:px-3 sm:py-2.5"
                 >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 sm:h-11 sm:w-11">
                     <Icon name="user" size="medium" color="primary" />
                   </span>
-                  <span className="text-left">
-                    <span className="block text-sm font-semibold text-text">Admin User</span>
+                  <span className="min-w-0 text-left">
+                    <span className="block truncate text-sm font-semibold text-text">
+                      Admin User
+                    </span>
                     <span className="block text-xs text-textLight">Profile and logout</span>
                   </span>
                 </button>
