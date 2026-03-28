@@ -4,6 +4,7 @@ export type IconName =
   | "search"
   | "plus"
   | "calendar"
+  | "chevronDown"
   | "close"
   | "dashboard"
   | "school"
@@ -15,6 +16,7 @@ export type IconName =
   | "results"
   | "settings"
   | "notification"
+  | "logout"
   | "help"
   | "user";
 
