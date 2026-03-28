@@ -1,4 +1,4 @@
-import { EduPlatformLogo, Icon } from "@/components";
+import { Button, Checkbox, EduPlatformLogo, Icon, InputBox } from "@/components";
 
 const highlights = [
   "Centralized school operations and access management",
@@ -102,55 +102,42 @@ export default function LoginPage() {
               </div>
 
               <form className="mt-6 space-y-4 lg:mt-7 lg:space-y-5">
-                <div>
-                  <label htmlFor="email" className="text-sm font-medium text-text lg:text-[15px]">
-                    Email address
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    placeholder="admin@school.com"
-                    className="mt-1.5 h-11 w-full rounded-2xl border border-surfaceSoft bg-base px-4 text-sm text-text transition placeholder:text-textMuted focus:border-primary lg:h-12 lg:text-[15px]"
-                  />
-                </div>
+                <InputBox
+                  id="email"
+                  type="email"
+                  label="Email address"
+                  placeholder="admin@school.com"
+                  variant="filled"
+                />
 
                 <div>
                   <div className="flex items-center justify-between gap-3">
-                    <label
-                      htmlFor="password"
-                      className="text-sm font-medium text-text lg:text-[15px]"
-                    >
-                      Password
-                    </label>
-                    <button
+                    <span className="text-sm font-medium text-text lg:text-[15px]">Password</span>
+                    <Button
                       type="button"
-                      className="text-sm font-medium text-primary transition hover:text-primaryDark lg:text-[15px]"
+                      variant="ghost"
+                      tone="primary"
+                      size="sm"
+                      className="min-h-0 px-0 text-sm font-medium lg:text-[15px]"
                     >
                       Forgot password?
-                    </button>
+                    </Button>
                   </div>
-                  <input
+                  <InputBox
                     id="password"
                     type="password"
                     placeholder="Enter your password"
-                    className="mt-1.5 h-11 w-full rounded-2xl border border-surfaceSoft bg-base px-4 text-sm text-text transition placeholder:text-textMuted focus:border-primary lg:h-12 lg:text-[15px]"
+                    variant="filled"
+                    className="mt-1.5"
                   />
                 </div>
 
-                <div className="flex items-center justify-between gap-3 rounded-2xl border border-surfaceSoft bg-base px-4 py-2.5 lg:py-3">
-                  <label className="flex items-center gap-3 text-sm text-textLight lg:text-[15px]">
-                    <input type="checkbox" className="h-4 w-4 rounded border border-surfaceSoft" />
-                    <span>Keep me signed in</span>
-                  </label>
+                <div className="flex items-center justify-between gap-3">
+                  <Checkbox id="keep-signed-in" label="Keep me signed in" />
                   <span className="text-xs text-textMuted">Protected session</span>
                 </div>
 
-                <button
-                  type="submit"
-                  className="inline-flex h-11 w-full items-center justify-center rounded-2xl bg-primary px-5 text-sm font-semibold text-surface transition hover:bg-primaryDark lg:h-12 lg:text-base"
-                >
-                  Sign in to dashboard
-                </button>
+                <Button type="submit" fullWidth size="lg" label="Sign in to dashboard"></Button>
               </form>
 
               <div className="mt-5 rounded-[22px] border border-surfaceSoft bg-base px-4 py-3 lg:px-5 lg:py-4">

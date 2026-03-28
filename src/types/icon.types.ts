@@ -3,6 +3,8 @@ import { ComponentType, SVGProps } from "react";
 export type IconName =
   | "search"
   | "plus"
+  | "calendar"
+  | "close"
   | "dashboard"
   | "school"
   | "students"

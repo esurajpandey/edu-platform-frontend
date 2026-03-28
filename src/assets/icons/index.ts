@@ -1,4 +1,6 @@
 import AttendanceIcon from "./attendance";
+import CalendarIcon from "./calendar";
+import CloseIcon from "./close";
 import DashboardIcon from "./dashboard";
 import ExamsIcon from "./exams";
 import FeesIcon from "./fees";
@@ -16,6 +18,8 @@ import { IconRegistry } from "@/types";
 
 export const icons: IconRegistry = {
   attendance: AttendanceIcon,
+  calendar: CalendarIcon,
+  close: CloseIcon,
   dashboard: DashboardIcon,
   exams: ExamsIcon,
   fees: FeesIcon,
