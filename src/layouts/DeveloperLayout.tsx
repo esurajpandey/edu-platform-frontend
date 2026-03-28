@@ -1,8 +1,8 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { EduPlatformLogo, Icon } from "@/components";
 import { getMenuByRole } from "@/constants/routes";
 
@@ -14,8 +14,15 @@ const utilityActions = [
 
 export default function DeveloperLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const role = "developer";
-  const menu = getMenuByRole(role);
+  const menu = useMemo(() => getMenuByRole(role), [role]);
+
+  useEffect(() => {
+    for (const item of menu) {
+      router.prefetch(item.path);
+    }
+  }, [menu, router]);
 
   return (
     <div className="h-screen overflow-hidden bg-base text-text">
@@ -46,6 +53,7 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
                 <Link
                   key={item.path}
                   href={item.path}
+                  prefetch
                   className={`group flex min-w-fit items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-medium transition lg:min-w-0 ${
                     isActive
                       ? "border-primary bg-primary text-surface shadow-[0_16px_30px_rgba(91,108,255,0.22)]"
