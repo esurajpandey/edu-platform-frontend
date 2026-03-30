@@ -1,9 +1,10 @@
 import Link from "next/link";
+import { UiShowcase } from "@/components";
 
 export default function DefaultPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-base px-4 py-10 text-text">
-      <section className="w-full max-w-xl rounded-2xl border border-surfaceSoft bg-surface p-8 shadow-md">
+    <main className="bg-base px-4 py-10 text-text">
+      <section className="mx-auto w-full max-w-5xl rounded-2xl border border-surfaceSoft bg-surface p-8 shadow-md">
         <h1 className="text-3xl font-semibold">Default Page</h1>
         <p className="mt-3 text-sm text-textLight">
           This is a default screen. You can continue to login or open dashboard.
@@ -23,6 +24,8 @@ export default function DefaultPage() {
             Open Dashboard
           </Link>
         </div>
+
+        <UiShowcase />
       </section>
     </main>
   );

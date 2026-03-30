@@ -1,22 +1,22 @@
 const recommendations = [
   {
-    title: "Revenue",
+    title: "Collected fees",
     value: "₹7,07,000",
-    note: "Increase +15% from last cycle",
+    note: "Increase +15% from the previous billing cycle",
     change: "+15%",
     tone: "bg-primary/10",
   },
   {
-    title: "Return of expenses",
-    value: "300%",
-    note: "Increase +10% from planning baseline",
+    title: "Attendance sync",
+    value: "300+",
+    note: "Class attendance submissions processed this morning",
     change: "+10%",
     tone: "bg-surfaceSoft",
   },
   {
-    title: "Campaign",
-    value: "₹3,80,000",
-    note: "Decrease by 18% from previous launch",
+    title: "Support queue",
+    value: "38 open",
+    note: "Decrease by 18% after workflow automation rollout",
     change: "-10%",
     tone: "bg-primary/5",
   },
@@ -39,10 +39,11 @@ export default function DeveloperDashboardPage() {
 
             <div className="min-w-0">
               <p className="text-base font-semibold text-text">
-                You achieved 88% of automation goals yesterday
+                You achieved 88% of school operations goals yesterday
               </p>
               <p className="mt-1 text-sm text-textLight">
-                Re-use a high-performing flow and launch a fresh developer campaign faster.
+                Re-use the highest performing workflow and keep admin teams moving without manual
+                follow-up.
               </p>
             </div>
           </div>
@@ -66,18 +67,19 @@ export default function DeveloperDashboardPage() {
 
               <div className="min-w-0">
                 <p className="text-lg font-semibold text-text">Hello, Developer!</p>
-                <p className="text-sm text-textLight">Engineering workspace overview</p>
+                <p className="text-sm text-textLight">School platform operations overview</p>
               </div>
             </div>
 
             <div className="mt-6">
               <h1 className="max-w-md text-3xl font-semibold leading-[1.02] tracking-tight text-text sm:text-4xl lg:text-[4rem]">
                 8 hours saved
-                <span className="block text-textMuted">thanks to smart automation!</span>
+                <span className="block text-textMuted">across school workflows.</span>
               </h1>
 
               <p className="mt-5 text-sm font-medium text-textLight">
-                Increase <span className="text-primary">+15%</span> from last month
+                Increase <span className="text-primary">+15%</span> from last month after automating
+                onboarding, attendance, and fee reminders
               </p>
 
               <button
@@ -131,7 +133,7 @@ export default function DeveloperDashboardPage() {
           <div>
             <h2 className="text-2xl font-semibold tracking-tight text-text">Recommendations</h2>
             <p className="mt-1 text-sm text-textLight">
-              Keep an eye on the strongest signals across your developer workspace.
+              Keep an eye on the strongest signals across your school management workspace.
             </p>
           </div>
 

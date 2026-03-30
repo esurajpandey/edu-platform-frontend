@@ -1,13 +1,20 @@
 import { create } from "zustand";
 
-type AuthState = {
-  user: {
-    id: number;
-    name: string;
-    role: string;
-  } | null;
+type AuthUser = {
+  id: number;
+  name: string;
+  role: string;
+};
+
+type AuthPayload = {
+  user: AuthUser | null;
   permissions: string[];
-  setAuth: (data: any) => void;
+};
+
+type AuthState = {
+  user: AuthUser | null;
+  permissions: string[];
+  setAuth: (data: AuthPayload) => void;
   logout: () => void;
 };
 

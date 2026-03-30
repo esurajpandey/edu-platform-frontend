@@ -86,8 +86,7 @@ const tailwindColorRestrictionPlugin = {
               ) {
                 context.report({
                   node: classValueNode,
-                  message:
-                    "Use semantic colors defined in src/app/globals.css @theme only.",
+                  message: "Use semantic colors defined in src/app/globals.css @theme only.",
                 });
               }
             }

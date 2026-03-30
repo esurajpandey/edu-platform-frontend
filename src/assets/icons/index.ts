@@ -1,9 +1,13 @@
 import AttendanceIcon from "./attendance";
+import CalendarIcon from "./calendar";
+import ChevronDownIcon from "./chevron-down";
+import CloseIcon from "./close";
 import DashboardIcon from "./dashboard";
 import ExamsIcon from "./exams";
 import FeesIcon from "./fees";
 import HelpIcon from "./help";
 import NotificationIcon from "./notification";
+import LogoutIcon from "./logout";
 import PlusIcon from "./plus";
 import ResultsIcon from "./results";
 import SchoolIcon from "./school";
@@ -16,11 +20,15 @@ import { IconRegistry } from "@/types";
 
 export const icons: IconRegistry = {
   attendance: AttendanceIcon,
+  calendar: CalendarIcon,
+  chevronDown: ChevronDownIcon,
+  close: CloseIcon,
   dashboard: DashboardIcon,
   exams: ExamsIcon,
   fees: FeesIcon,
   help: HelpIcon,
   notification: NotificationIcon,
+  logout: LogoutIcon,
   plus: PlusIcon,
   results: ResultsIcon,
   school: SchoolIcon,

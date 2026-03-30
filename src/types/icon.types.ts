@@ -3,6 +3,9 @@ import { ComponentType, SVGProps } from "react";
 export type IconName =
   | "search"
   | "plus"
+  | "calendar"
+  | "chevronDown"
+  | "close"
   | "dashboard"
   | "school"
   | "students"
@@ -13,6 +16,7 @@ export type IconName =
   | "results"
   | "settings"
   | "notification"
+  | "logout"
   | "help"
   | "user";
 
