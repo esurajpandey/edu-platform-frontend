@@ -1,67 +1,64 @@
 "use client";
 
-import { ReactNode } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { EduPlatformLogo, Icon } from "@/components";
+import { ReactNode, useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { getMenuByRole } from "@/constants/routes";
+import {
+  DeveloperHeader,
+  DeveloperMobileDrawer,
+  DeveloperSidebar,
+  developerProfileActions,
+  developerUtilityActions,
+} from "./developer";
 
 export default function DeveloperLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const role = "developer";
-  const menu = getMenuByRole(role);
+  const menu = useMemo(() => getMenuByRole(role), [role]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    for (const item of menu) {
+      router.prefetch(item.path);
+    }
+  }, [menu, router]);
+
+  const activeItem = menu.find((item) => item.path === pathname) ?? menu[0];
+  const profileActions = developerProfileActions.map((action) => ({
+    ...action,
+    onSelect: () => setIsMobileMenuOpen(false),
+  }));
 
   return (
     <div className="h-screen overflow-hidden bg-base text-text">
-      <header className="flex h-16 items-center justify-between border-b border-surfaceSoft bg-surface px-4">
-        <div className="flex items-center gap-3">
-          <EduPlatformLogo />
-          <div>
-            <h1 className="text-sm font-semibold text-text">Edu Platform</h1>
-            <p className="text-[11px] text-textLight">Developer workspace</p>
-          </div>
-        </div>
-      </header>
-
-      <div className="flex h-[calc(100vh-40px)]">
-        <aside className="flex h-full w-[300px] shrink-0 flex-col border-r border-surfaceSoft bg-surface">
-          <div className="border-b border-surfaceSoft px-5 py-4">
-            <p className="text-sm font-semibold text-text">Developer</p>
-            <p className="mt-1 text-xs text-textLight">Admin Control</p>
-          </div>
-
-          <nav className="flex-1 space-y-2 overflow-y-auto p-4">
-            {menu.map((item) => {
-              const isActive = pathname === item.path;
-
-              return (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-sm font-medium transition ${
-                    isActive
-                      ? "border-primary bg-primary text-surface shadow-sm"
-                      : "border-transparent text-textLight hover:border-surfaceSoft hover:bg-base hover:text-text"
-                  }`}
-                >
-                  {item.icon ? (
-                    <Icon
-                      name={item.icon}
-                      size="small"
-                      color={isActive ? "surface" : "textLight"}
-                    />
-                  ) : null}
-                  <span>{item.name}</span>
-                </Link>
-              );
-            })}
-          </nav>
+      <div className="mx-auto flex h-full max-w-[1600px] flex-col lg:flex-row">
+        <aside className="hidden border-r border-surfaceSoft bg-surface px-5 py-5 lg:flex lg:h-full lg:w-[270px] lg:shrink-0 lg:flex-col">
+          <DeveloperSidebar menu={menu} pathname={pathname} />
         </aside>
 
-        <main className="flex-1 overflow-auto p-6">
-          <div className="">{children}</div>
-        </main>
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+          <DeveloperHeader
+            activeItem={activeItem}
+            utilityActions={developerUtilityActions}
+            onMenuToggle={() => setIsMobileMenuOpen((current) => !current)}
+            isMobileMenuOpen={isMobileMenuOpen}
+            profileActions={profileActions}
+          />
+
+          <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 py-5 lg:px-8 lg:py-8">
+            <div className="mx-auto max-w-[1280px]">{children}</div>
+          </main>
+        </div>
       </div>
+
+      <DeveloperMobileDrawer isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)}>
+        <DeveloperSidebar
+          menu={menu}
+          pathname={pathname}
+          onNavigate={() => setIsMobileMenuOpen(false)}
+        />
+      </DeveloperMobileDrawer>
     </div>
   );
 }
