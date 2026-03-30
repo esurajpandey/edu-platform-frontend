@@ -9,7 +9,6 @@ import { DeveloperSidebarProps } from "./types";
 export default function DeveloperSidebar({ menu, pathname, onNavigate }: DeveloperSidebarProps) {
   const navRef = useRef<HTMLElement | null>(null);
   const activeItemRef = useRef<HTMLAnchorElement | null>(null);
-  const activeMenuItem = menu.find((item) => item.path === pathname) ?? menu[0];
 
   useEffect(() => {
     if (!navRef.current || !activeItemRef.current) {
