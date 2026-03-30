@@ -1,22 +1,22 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  --color-*: initial;
-  --color-transparent: transparent;
-  --color-current: currentColor;
-  --color-inherit: inherit;
+:root {
+  --color-primary: 91 108 255;
+  --color-primary-dark: 74 91 230;
+  --color-primary-light: 124 138 255;
+  --color-base: 245 247 251;
+  --color-surface: 255 255 255;
+  --color-surface-soft: 238 241 247;
+  --color-text: 31 41 55;
+  --color-text-light: 107 114 128;
+  --color-text-muted: 156 163 175;
+  --color-danger: 239 68 68;
+}
 
-  --color-primary: #5b6cff;
-  --color-primaryDark: #4a5be6;
-  --color-primaryLight: #7c8aff;
-
-  --color-base: #f5f7fb;
-  --color-surface: #ffffff;
-  --color-surfaceSoft: #eef1f7;
-
-  --color-text: #1f2937;
-  --color-textLight: #6b7280;
-  --color-textMuted: #9ca3af;
-
-  --color-danger: #ef4444;
+@layer base {
+  body {
+    @apply bg-base text-text;
+  }
 }
