@@ -5,19 +5,19 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components";
 import { cn } from "@/lib/cn";
-import { DeveloperProfileAction } from "./types";
+import { SchoolProfileAction } from "./types";
 
-type DeveloperProfileMenuProps = {
-  actions: DeveloperProfileAction[];
+type SchoolProfileMenuProps = {
+  actions: SchoolProfileAction[];
   userName: string;
   userTitle: string;
 };
 
-export default function DeveloperProfileMenu({
+export default function SchoolProfileMenu({
   actions,
   userName,
   userTitle,
-}: DeveloperProfileMenuProps) {
+}: SchoolProfileMenuProps) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +49,7 @@ export default function DeveloperProfileMenu({
     };
   }, [isOpen]);
 
-  const handleAction = (action: DeveloperProfileAction) => {
+  const handleAction = (action: SchoolProfileAction) => {
     setIsOpen(false);
     action.onSelect?.();
 

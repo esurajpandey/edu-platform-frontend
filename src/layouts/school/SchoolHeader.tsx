@@ -1,10 +1,12 @@
 "use client";
 
 import { Icon } from "@/components";
-import DeveloperProfileMenu from "./DeveloperProfileMenu";
-import { DeveloperHeaderProps } from "./types";
+import SchoolProfileMenu from "./SchoolProfileMenu";
+import { SchoolHeaderProps } from "./types";
 
-export default function DeveloperHeader({
+export default function SchoolHeader({
+  workspaceLabel,
+  workspaceDescription,
   activeItem,
   utilityActions,
   onMenuToggle,
@@ -12,21 +14,20 @@ export default function DeveloperHeader({
   profileActions,
   userName,
   userTitle,
-}: DeveloperHeaderProps) {
+}: SchoolHeaderProps) {
   return (
     <header className="sticky top-0 z-10 border-b border-surfaceSoft/80 bg-base/90 px-4 py-4 backdrop-blur lg:px-8 lg:py-5">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
         <div className="flex min-w-0 flex-1 items-start justify-between gap-3">
           <div className="min-w-0 max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-              Developer Workspace
+              {workspaceLabel}
             </p>
             <h2 className="mt-1 text-xl font-semibold tracking-tight text-text">
-              {activeItem?.name ?? "Developer control center"}
+              {activeItem?.name ?? "School workspace"}
             </h2>
             <p className="mt-1 text-sm text-textLight">
-              {activeItem?.description ??
-                "Monitor platform health, guide school operations, and keep the team moving."}
+              {activeItem?.description ?? workspaceDescription}
             </p>
           </div>
 
@@ -75,11 +76,7 @@ export default function DeveloperHeader({
           </div>
 
           <div className="min-w-0 xl:w-80 xl:max-w-80 xl:shrink-0">
-            <DeveloperProfileMenu
-              actions={profileActions}
-              userName={userName}
-              userTitle={userTitle}
-            />
+            <SchoolProfileMenu actions={profileActions} userName={userName} userTitle={userTitle} />
           </div>
         </div>
       </div>

@@ -3,29 +3,42 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { APP_ROUTES } from "@/constants/app-routes";
-import { getMenuByRole } from "@/constants/routes";
-import { getFullName, getInitials, ROLE_LABELS } from "@/lib/access-control";
+import { getSchoolMenuByPermissions } from "@/constants/routes";
+import { Role } from "@/constants/roles";
+import { getFullName, ROLE_LABELS } from "@/lib/access-control";
 import { useAuthStore } from "@/store/auth.store";
+import { DeveloperMobileDrawer } from "./developer";
 import {
-  DeveloperHeader,
-  DeveloperMobileDrawer,
-  DeveloperSidebar,
-  developerProfileActions,
-  developerUtilityActions,
-} from "./developer";
+  SchoolHeader,
+  SchoolSidebar,
+  getSchoolProfileActions,
+  schoolUtilityActions,
+} from "./school";
 
-export default function DeveloperLayout({ children }: { children: ReactNode }) {
+type SchoolLayoutProps = {
+  children: ReactNode;
+  consoleRole: Extract<Role, "school-admin" | "teacher" | "staff">;
+  workspaceLabel: string;
+  workspaceDescription: string;
+};
+
+export default function SchoolLayout({
+  children,
+  consoleRole,
+  workspaceLabel,
+  workspaceDescription,
+}: SchoolLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const role = "developer";
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
+  const storedPermissions = useAuthStore((state) => state.permissions);
   const setActiveRole = useAuthStore((state) => state.setActiveRole);
   const logout = useAuthStore((state) => state.logout);
-  const hasRole = useAuthStore((state) => state.hasRole);
+  const canAccessConsole = useAuthStore((state) => state.canAccessConsole);
   const getDefaultHomePath = useAuthStore((state) => state.getDefaultHomePath);
-  const menu = useMemo(() => getMenuByRole(role), [role]);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const activeSchool = useAuthStore((state) => state.activeSchool);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -33,13 +46,18 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
       return;
     }
 
-    if (!hasRole(role)) {
+    if (!canAccessConsole(consoleRole)) {
       router.replace(getDefaultHomePath());
       return;
     }
 
-    setActiveRole(role);
-  }, [getDefaultHomePath, hasRole, isAuthenticated, role, router, setActiveRole]);
+    setActiveRole(consoleRole);
+  }, [canAccessConsole, consoleRole, getDefaultHomePath, isAuthenticated, router, setActiveRole]);
+
+  const menu = useMemo(
+    () => getSchoolMenuByPermissions(storedPermissions, consoleRole),
+    [consoleRole, storedPermissions],
+  );
 
   useEffect(() => {
     for (const item of menu) {
@@ -47,11 +65,15 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
     }
   }, [menu, router]);
 
-  const activeItem = menu.find((item) => item.path === pathname) ?? menu[0];
-  const userName = getFullName(user) || "Platform User";
-  const userTitle = ROLE_LABELS.developer;
-  const userInitials = getInitials(user) || "PU";
-  const profileActions = developerProfileActions.map((action) => ({
+  const activeItem =
+    menu.find((item) => pathname === item.path || pathname.startsWith(`${item.path}/`)) ?? menu[0];
+
+  const userName = getFullName(user) || "School User";
+  const userTitle = activeSchool
+    ? `${ROLE_LABELS[consoleRole]} · ${activeSchool.name}`
+    : ROLE_LABELS[consoleRole];
+
+  const profileActions = getSchoolProfileActions(consoleRole).map((action) => ({
     ...action,
     onSelect: () => {
       setIsMobileMenuOpen(false);
@@ -66,19 +88,20 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
     <div className="h-screen overflow-hidden bg-base text-text">
       <div className="mx-auto flex h-full max-w-[1600px] flex-col lg:flex-row">
         <aside className="hidden border-r border-surfaceSoft bg-surface px-5 py-5 lg:flex lg:h-full lg:w-[270px] lg:shrink-0 lg:flex-col">
-          <DeveloperSidebar
+          <SchoolSidebar
             menu={menu}
             pathname={pathname}
             userName={userName}
             userTitle={userTitle}
-            userInitials={userInitials}
           />
         </aside>
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-          <DeveloperHeader
+          <SchoolHeader
+            workspaceLabel={workspaceLabel}
+            workspaceDescription={workspaceDescription}
             activeItem={activeItem}
-            utilityActions={developerUtilityActions}
+            utilityActions={schoolUtilityActions}
             onMenuToggle={() => setIsMobileMenuOpen((current) => !current)}
             isMobileMenuOpen={isMobileMenuOpen}
             profileActions={profileActions}
@@ -93,12 +116,11 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
       </div>
 
       <DeveloperMobileDrawer isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)}>
-        <DeveloperSidebar
+        <SchoolSidebar
           menu={menu}
           pathname={pathname}
           userName={userName}
           userTitle={userTitle}
-          userInitials={userInitials}
           onNavigate={() => setIsMobileMenuOpen(false)}
         />
       </DeveloperMobileDrawer>

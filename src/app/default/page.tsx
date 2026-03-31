@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { UiShowcase } from "@/components";
+import { APP_ROUTES } from "@/constants/app-routes";
 
 export default function DefaultPage() {
   return (
@@ -12,13 +13,13 @@ export default function DefaultPage() {
 
         <div className="mt-6 flex gap-3">
           <Link
-            href="/login"
+            href={APP_ROUTES.login}
             className="rounded-xl bg-primary px-5 py-3 text-sm font-medium text-surface transition hover:bg-primaryDark"
           >
             Go to Login
           </Link>
           <Link
-            href="/dashboard"
+            href={APP_ROUTES.developer.dashboard}
             className="rounded-xl border border-surfaceSoft bg-surface px-5 py-3 text-sm font-medium text-text transition hover:bg-surfaceSoft"
           >
             Open Dashboard

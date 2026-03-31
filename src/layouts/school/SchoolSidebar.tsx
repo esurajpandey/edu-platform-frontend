@@ -4,16 +4,24 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { EduPlatformLogo, Icon } from "@/components";
 import { cn } from "@/lib/cn";
-import { DeveloperSidebarProps } from "./types";
+import { SchoolSidebarProps } from "./types";
 
-export default function DeveloperSidebar({
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
+export default function SchoolSidebar({
   menu,
   pathname,
   userName,
   userTitle,
-  userInitials,
   onNavigate,
-}: DeveloperSidebarProps) {
+}: SchoolSidebarProps) {
   const navRef = useRef<HTMLElement | null>(null);
   const activeItemRef = useRef<HTMLAnchorElement | null>(null);
 
@@ -45,9 +53,10 @@ export default function DeveloperSidebar({
           <h1 className="truncate text-base font-semibold tracking-tight text-text">
             Edu Platform
           </h1>
-          <p className="text-xs text-textLight">School management workspace</p>
+          <p className="text-xs text-textLight">School workspace</p>
         </div>
       </div>
+
       <div className="relative mt-4 min-h-0 flex-1">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden h-8 lg:block"
@@ -57,6 +66,7 @@ export default function DeveloperSidebar({
           className="pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden h-8 lg:block"
           style={{ background: "linear-gradient(to top, var(--color-surface), transparent)" }}
         />
+
         <nav
           ref={navRef}
           className="flex h-full flex-col gap-1.5 overflow-y-auto pr-1 scroll-smooth overscroll-contain"
@@ -102,7 +112,7 @@ export default function DeveloperSidebar({
       <div className="mt-4 rounded-[22px] border border-surfaceSoft bg-base p-3.5">
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-text text-sm font-semibold text-surface">
-            {userInitials}
+            {getInitials(userName) || "U"}
           </span>
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-text">{userName}</p>
@@ -115,8 +125,8 @@ export default function DeveloperSidebar({
             type="button"
             className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-surfaceSoft bg-surface px-3 py-2 text-sm font-medium text-textLight transition hover:border-primary hover:text-primary"
           >
-            <Icon name="settings" size="small" color="textLight" />
-            <span>Settings</span>
+            <Icon name="calendar" size="small" color="textLight" />
+            <span>Schedule</span>
           </button>
           <button
             type="button"
