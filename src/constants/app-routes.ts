@@ -57,7 +57,12 @@ export const APP_ROUTES = {
     student: {
       root: "/school/student",
       dashboard: "/school/student/dashboard",
+      classes: "/school/student/classes",
+      syllabus: "/school/student/syllabus",
+      attendance: "/school/student/attendance",
+      fees: "/school/student/fees",
       results: "/school/student/results",
+      profile: "/school/student/profile",
     },
   },
 } as const;

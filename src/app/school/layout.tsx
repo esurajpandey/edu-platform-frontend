@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useMemo } from "react";
+import { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import SchoolLayout from "@/layouts/SchoolLayout";
 import { Role } from "@/constants/roles";
@@ -42,8 +42,12 @@ function getConsoleRoleFromPath(
 
 export default function Layout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const consoleRole = useMemo(() => getConsoleRoleFromPath(pathname), [pathname]);
+  const consoleRole = getConsoleRoleFromPath(pathname);
   const copy = SCHOOL_LAYOUT_COPY[consoleRole];
+
+  if (pathname.startsWith("/school/student")) {
+    return <>{children}</>;
+  }
 
   return (
     <SchoolLayout

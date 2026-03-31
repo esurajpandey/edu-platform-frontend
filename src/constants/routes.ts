@@ -63,10 +63,40 @@ const STUDENT_MENU: MenuItem[] = [
     description: "Review your schedule, academics, and recent activity.",
   },
   {
+    name: "Classes",
+    path: APP_ROUTES.school.student.classes,
+    icon: "classes",
+    description: "See class schedule, sections, and class-related updates.",
+  },
+  {
+    name: "Syllabus",
+    path: APP_ROUTES.school.student.syllabus,
+    icon: "syllabus",
+    description: "Track subject-wise syllabus progress and upcoming topics.",
+  },
+  {
+    name: "Attendance",
+    path: APP_ROUTES.school.student.attendance,
+    icon: "attendance",
+    description: "Review attendance history, status, and follow-up notices.",
+  },
+  {
+    name: "Fee Payments",
+    path: APP_ROUTES.school.student.fees,
+    icon: "fees",
+    description: "Check dues, paid receipts, and current payment status.",
+  },
+  {
     name: "Results",
     path: APP_ROUTES.school.student.results,
     icon: "results",
     description: "Access personal academic results and performance updates.",
+  },
+  {
+    name: "Profile",
+    path: APP_ROUTES.school.student.profile,
+    icon: "profile",
+    description: "View your student profile and account information.",
   },
 ];
 
