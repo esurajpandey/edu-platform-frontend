@@ -4,8 +4,7 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { APP_ROUTES } from "@/constants/app-routes";
 import { getMenuByRole } from "@/constants/routes";
-import { getFullName, getInitials, ROLE_LABELS } from "@/lib/access-control";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore, useAuthStoreHydrated } from "@/store/auth.store";
 import {
   DeveloperHeader,
   DeveloperMobileDrawer,
@@ -18,8 +17,9 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const role = "developer";
+  const hasHydrated = useAuthStoreHydrated();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const user = useAuthStore((state) => state.user);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const setActiveRole = useAuthStore((state) => state.setActiveRole);
   const logout = useAuthStore((state) => state.logout);
   const hasRole = useAuthStore((state) => state.hasRole);
@@ -28,6 +28,10 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
     if (!isAuthenticated) {
       router.replace(APP_ROUTES.login);
       return;
@@ -39,7 +43,7 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
     }
 
     setActiveRole(role);
-  }, [getDefaultHomePath, hasRole, isAuthenticated, role, router, setActiveRole]);
+  }, [getDefaultHomePath, hasHydrated, hasRole, isAuthenticated, role, router, setActiveRole]);
 
   useEffect(() => {
     for (const item of menu) {
@@ -48,9 +52,9 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
   }, [menu, router]);
 
   const activeItem = menu.find((item) => item.path === pathname) ?? menu[0];
-  const userName = getFullName(user) || "Platform User";
-  const userTitle = ROLE_LABELS.developer;
-  const userInitials = getInitials(user) || "PU";
+  const userName = currentUser?.name ?? "Platform User";
+  const userTitle = currentUser?.title ?? "Platform Administrator";
+  const userInitials = currentUser?.initials ?? "PU";
   const profileActions = developerProfileActions.map((action) => ({
     ...action,
     onSelect: () => {
@@ -61,6 +65,10 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
       }
     },
   }));
+
+  if (!hasHydrated) {
+    return null;
+  }
 
   return (
     <div className="h-screen overflow-hidden bg-base text-text">

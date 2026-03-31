@@ -5,8 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { APP_ROUTES } from "@/constants/app-routes";
 import { getSchoolMenuByPermissions } from "@/constants/routes";
 import { Role } from "@/constants/roles";
-import { getFullName, ROLE_LABELS } from "@/lib/access-control";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore, useAuthStoreHydrated } from "@/store/auth.store";
 import { DeveloperMobileDrawer } from "./developer";
 import {
   SchoolHeader,
@@ -31,16 +30,20 @@ export default function SchoolLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const hasHydrated = useAuthStoreHydrated();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const user = useAuthStore((state) => state.user);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const storedPermissions = useAuthStore((state) => state.permissions);
   const setActiveRole = useAuthStore((state) => state.setActiveRole);
   const logout = useAuthStore((state) => state.logout);
   const canAccessConsole = useAuthStore((state) => state.canAccessConsole);
   const getDefaultHomePath = useAuthStore((state) => state.getDefaultHomePath);
-  const activeSchool = useAuthStore((state) => state.activeSchool);
 
   useEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
     if (!isAuthenticated) {
       router.replace(APP_ROUTES.login);
       return;
@@ -52,7 +55,15 @@ export default function SchoolLayout({
     }
 
     setActiveRole(consoleRole);
-  }, [canAccessConsole, consoleRole, getDefaultHomePath, isAuthenticated, router, setActiveRole]);
+  }, [
+    canAccessConsole,
+    consoleRole,
+    getDefaultHomePath,
+    hasHydrated,
+    isAuthenticated,
+    router,
+    setActiveRole,
+  ]);
 
   const menu = useMemo(
     () => getSchoolMenuByPermissions(storedPermissions, consoleRole),
@@ -68,10 +79,8 @@ export default function SchoolLayout({
   const activeItem =
     menu.find((item) => pathname === item.path || pathname.startsWith(`${item.path}/`)) ?? menu[0];
 
-  const userName = getFullName(user) || "School User";
-  const userTitle = activeSchool
-    ? `${ROLE_LABELS[consoleRole]} · ${activeSchool.name}`
-    : ROLE_LABELS[consoleRole];
+  const userName = currentUser?.name ?? "School User";
+  const userTitle = currentUser?.title ?? "School User";
 
   const profileActions = getSchoolProfileActions(consoleRole).map((action) => ({
     ...action,
@@ -83,6 +92,10 @@ export default function SchoolLayout({
       }
     },
   }));
+
+  if (!hasHydrated) {
+    return null;
+  }
 
   return (
     <div className="h-screen overflow-hidden bg-base text-text">

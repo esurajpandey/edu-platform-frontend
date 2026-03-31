@@ -5,24 +5,27 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { APP_ROUTES } from "@/constants/app-routes";
 import { getMenuByRole } from "@/constants/routes";
-import { getFullName, ROLE_LABELS } from "@/lib/access-control";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore, useAuthStoreHydrated } from "@/store/auth.store";
 import { EduPlatformLogo, Icon } from "@/components";
 import { cn } from "@/lib/cn";
 
 export default function StudentLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const hasHydrated = useAuthStoreHydrated();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const user = useAuthStore((state) => state.user);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const hasRole = useAuthStore((state) => state.hasRole);
   const setActiveRole = useAuthStore((state) => state.setActiveRole);
   const logout = useAuthStore((state) => state.logout);
   const getDefaultHomePath = useAuthStore((state) => state.getDefaultHomePath);
-  const activeSchool = useAuthStore((state) => state.activeSchool);
   const menu = useMemo(() => getMenuByRole("student"), []);
 
   useEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
     if (!isAuthenticated) {
       router.replace(APP_ROUTES.login);
       return;
@@ -34,7 +37,11 @@ export default function StudentLayout({ children }: { children: ReactNode }) {
     }
 
     setActiveRole("student");
-  }, [getDefaultHomePath, hasRole, isAuthenticated, router, setActiveRole]);
+  }, [getDefaultHomePath, hasHydrated, hasRole, isAuthenticated, router, setActiveRole]);
+
+  if (!hasHydrated) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-base text-text">
@@ -48,12 +55,10 @@ export default function StudentLayout({ children }: { children: ReactNode }) {
                   Student Workspace
                 </p>
                 <h1 className="mt-1 text-2xl font-semibold tracking-tight text-text">
-                  {getFullName(user) || "Student"}
+                  {currentUser?.name ?? "Student"}
                 </h1>
                 <p className="mt-1 text-sm text-textLight">
-                  {activeSchool
-                    ? `${ROLE_LABELS.student} · ${activeSchool.name}`
-                    : "Personal academic workspace"}
+                  {currentUser?.title ?? "Personal academic workspace"}
                 </p>
               </div>
             </div>

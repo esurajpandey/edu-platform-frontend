@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { DEMO_AUTH_COOKIE } from "@/constants/auth";
@@ -5,18 +6,33 @@ import { Permission } from "@/constants/permissions";
 import { Role } from "@/constants/roles";
 import {
   getDefaultHomePath,
+  getFullName,
+  getInitials,
   getPermissionsForRole,
   getRoleAssignment,
   getRolesFromAssignments,
   hasAnyPermission,
   hasPermission,
   hasRole,
+  ROLE_LABELS,
 } from "@/lib/access-control";
 import { AuthSession, RoleAssignment, SchoolDetails, UserDetails } from "@/types/session.types";
 
+type CurrentUserContext = {
+  id: string;
+  name: string;
+  initials: string;
+  email: string;
+  title: string;
+  activeRole: Role | null;
+  activeSchoolId: string | null;
+};
+
 type AuthState = {
+  hasHydrated: boolean;
   isAuthenticated: boolean;
   user: UserDetails | null;
+  currentUser: CurrentUserContext | null;
   primaryRole: Role | null;
   secondaryRoles: Role[];
   roles: Role[];
@@ -38,8 +54,10 @@ type AuthState = {
 };
 
 const initialState = {
+  hasHydrated: false,
   isAuthenticated: false,
   user: null as UserDetails | null,
+  currentUser: null as CurrentUserContext | null,
   primaryRole: null as Role | null,
   secondaryRoles: [] as Role[],
   roles: [] as Role[],
@@ -76,6 +94,33 @@ function getResolvedSchool(schools: SchoolDetails[], activeSchoolId: string | nu
   return schools.find((school) => school.id === activeSchoolId) ?? null;
 }
 
+function getCurrentUserContext(
+  user: UserDetails | null,
+  activeRole: Role | null,
+  activeSchool: SchoolDetails | null,
+): CurrentUserContext | null {
+  if (!user) {
+    return null;
+  }
+
+  const name = getFullName(user) || user.email;
+  const title = activeRole
+    ? activeSchool
+      ? `${ROLE_LABELS[activeRole]} · ${activeSchool.name}`
+      : ROLE_LABELS[activeRole]
+    : "User";
+
+  return {
+    id: user.id,
+    name,
+    initials: getInitials(user) || "U",
+    email: user.email,
+    title,
+    activeRole,
+    activeSchoolId: activeSchool?.id ?? null,
+  };
+}
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -88,10 +133,13 @@ export const useAuthStore = create<AuthState>()(
           session.activeRole,
           session.activeSchoolId,
         );
+        const activeSchool = getResolvedSchool(session.schools, session.activeSchoolId);
 
         set({
+          hasHydrated: true,
           isAuthenticated: true,
           user: session.user,
+          currentUser: getCurrentUserContext(session.user, session.activeRole, activeSchool),
           primaryRole: session.primaryRole,
           secondaryRoles: session.secondaryRoles,
           roles,
@@ -100,7 +148,7 @@ export const useAuthStore = create<AuthState>()(
           roleAssignments: session.roleAssignments,
           schools: session.schools,
           activeSchoolId: session.activeSchoolId,
-          activeSchool: getResolvedSchool(session.schools, session.activeSchoolId),
+          activeSchool,
         });
 
         setDemoCookie("1");
@@ -116,14 +164,20 @@ export const useAuthStore = create<AuthState>()(
         set((state) => ({
           activeRole: role,
           permissions: getResolvedPermissions(state.roleAssignments, role, state.activeSchoolId),
+          currentUser: getCurrentUserContext(state.user, role, state.activeSchool),
         })),
 
       setActiveSchool: (schoolId) =>
-        set((state) => ({
-          activeSchoolId: schoolId,
-          activeSchool: getResolvedSchool(state.schools, schoolId),
-          permissions: getResolvedPermissions(state.roleAssignments, state.activeRole, schoolId),
-        })),
+        set((state) => {
+          const activeSchool = getResolvedSchool(state.schools, schoolId);
+
+          return {
+            activeSchoolId: schoolId,
+            activeSchool,
+            permissions: getResolvedPermissions(state.roleAssignments, state.activeRole, schoolId),
+            currentUser: getCurrentUserContext(state.user, state.activeRole, activeSchool),
+          };
+        }),
 
       hasRole: (role) => hasRole(get().roles, role),
 
@@ -140,15 +194,22 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({
           ...initialState,
+          hasHydrated: true,
         });
         setDemoCookie("");
       },
     }),
     {
       name: "edu-auth-store",
+      onRehydrateStorage: () => (state) => {
+        if (!state?.hasHydrated) {
+          useAuthStore.setState({ hasHydrated: true });
+        }
+      },
       partialize: (state) => ({
         isAuthenticated: state.isAuthenticated,
         user: state.user,
+        currentUser: state.currentUser,
         primaryRole: state.primaryRole,
         secondaryRoles: state.secondaryRoles,
         roles: state.roles,
@@ -162,3 +223,11 @@ export const useAuthStore = create<AuthState>()(
     },
   ),
 );
+
+export function useAuthStoreHydrated() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
