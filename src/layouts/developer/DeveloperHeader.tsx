@@ -15,7 +15,7 @@ export default function DeveloperHeader({
 }: DeveloperHeaderProps) {
   return (
     <header className="sticky top-0 z-10 border-b border-surfaceSoft/80 bg-base/90 px-4 py-4 backdrop-blur lg:px-8 lg:py-5">
-      <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+      <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
         <div className="flex min-w-0 flex-1 items-start justify-between gap-3">
           <div className="min-w-0 max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
@@ -44,31 +44,31 @@ export default function DeveloperHeader({
           </button>
         </div>
 
-        <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center xl:ml-6 xl:w-auto xl:flex-nowrap xl:items-start xl:justify-end xl:gap-3 xl:self-start">
+        <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center xl:ml-6 xl:w-auto xl:flex-nowrap xl:items-center xl:justify-end">
           <div className="flex items-center gap-2 rounded-[22px] border border-surfaceSoft bg-surface p-1.5 shadow-sm sm:contents sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none xl:flex-nowrap xl:justify-end">
             {utilityActions.map((action) =>
               action.label === "Search" ? (
                 <label
                   key={action.label}
-                  className="hidden h-12 w-56 items-center gap-3 rounded-2xl border border-surfaceSoft bg-surface px-4 text-sm text-textLight shadow-sm xl:flex"
+                  className="hidden h-12 w-80 items-center gap-3 rounded-3xl border border-surfaceSoft bg-surface px-4 text-sm text-textLight transition focus-within:border-primary focus-within:ring-4 focus-within:ring-primaryLight xl:flex"
+                  style={{ boxShadow: "0 12px 30px rgba(15, 23, 42, 0.06)" }}
                 >
                   <Icon name={action.icon} size="small" color="textLight" />
                   <input
                     type="text"
                     placeholder="Search"
-                    style={{ width: "100%", outline: "none" }}
+                    style={{ width: "100%", outline: "none", fontSize: "1rem" }}
                   />
                 </label>
               ) : (
                 <button
                   key={action.label}
                   type="button"
-                  className="flex h-11 w-11 items-center justify-center rounded-2xl text-textLight transition hover:bg-base hover:text-primary sm:h-[50px] sm:w-auto sm:gap-2 sm:border sm:border-surfaceSoft sm:bg-surface sm:px-4 sm:text-sm sm:font-medium sm:hover:border-primary xl:shrink-0"
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl border border-surfaceSoft bg-surface text-textLight shadow-sm transition hover:border-primary hover:bg-base hover:text-primary xl:shrink-0"
                   aria-label={action.label}
                   title={action.label}
                 >
                   <Icon name={action.icon} size="small" color="textLight" />
-                  <span className="hidden sm:inline">{action.label}</span>
                 </button>
               ),
             )}

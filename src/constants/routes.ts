@@ -162,7 +162,7 @@ const SCHOOL_WORKSPACE_MENU: SchoolWorkspaceMenuItem[] = [
   },
   {
     name: "Classes",
-    icon: "attendance",
+    icon: "classes",
     description: "Manage class operations, sections, and live attendance workflows.",
     requiredPermissions: [PERMISSIONS.CLASSES_VIEW],
     paths: {
@@ -173,7 +173,7 @@ const SCHOOL_WORKSPACE_MENU: SchoolWorkspaceMenuItem[] = [
   },
   {
     name: "Syllabus",
-    icon: "results",
+    icon: "syllabus",
     description: "Prepare and review yearly and class-wise syllabus plans.",
     requiredPermissions: [PERMISSIONS.SYLLABUS_VIEW],
     paths: {

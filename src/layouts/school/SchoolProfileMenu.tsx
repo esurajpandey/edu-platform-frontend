@@ -65,18 +65,14 @@ export default function SchoolProfileMenu({
         aria-haspopup="menu"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((current) => !current)}
-        className="flex min-h-[50px] w-full items-center gap-2.5 rounded-[22px] border border-surfaceSoft bg-surface px-2.5 py-1.5 shadow-sm transition hover:border-primary sm:min-h-[50px] sm:w-auto sm:px-3 xl:w-full"
+        className="flex h-12 w-full items-center gap-2.5 rounded-[22px] border border-surfaceSoft bg-surface px-2.5 py-1 shadow-sm transition hover:border-primary sm:w-auto sm:px-3 xl:w-full"
       >
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 sm:h-11 sm:w-11">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
           <Icon name="user" size="medium" color="primary" />
         </span>
         <span className="min-w-0 flex-1 text-left leading-tight">
-          <span className="block truncate text-sm font-semibold text-text sm:text-[15px]">
-            {userName}
-          </span>
-          <span className="mt-1 block truncate text-[12px] text-textLight sm:text-xs">
-            {userTitle}
-          </span>
+          <span className="block truncate text-sm font-semibold text-text">{userName}</span>
+          <span className="block truncate text-xs text-textLight">{userTitle}</span>
         </span>
         <span
           className={cn(
