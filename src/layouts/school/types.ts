@@ -1,11 +1,11 @@
 import { IconName, MenuItem } from "@/types";
 
-export type DeveloperUtilityAction = {
+export type SchoolUtilityAction = {
   label: string;
   icon: IconName;
 };
 
-export type DeveloperProfileAction = {
+export type SchoolProfileAction = {
   label: string;
   icon: IconName;
   href?: string;
@@ -13,21 +13,22 @@ export type DeveloperProfileAction = {
   onSelect?: () => void;
 };
 
-export type DeveloperSidebarProps = {
+export type SchoolSidebarProps = {
   menu: MenuItem[];
   pathname: string;
   userName: string;
   userTitle: string;
-  userInitials: string;
   onNavigate?: () => void;
 };
 
-export type DeveloperHeaderProps = {
+export type SchoolHeaderProps = {
+  workspaceLabel: string;
+  workspaceDescription: string;
   activeItem?: MenuItem;
-  utilityActions: DeveloperUtilityAction[];
+  utilityActions: SchoolUtilityAction[];
   onMenuToggle: () => void;
   isMobileMenuOpen: boolean;
-  profileActions: DeveloperProfileAction[];
+  profileActions: SchoolProfileAction[];
   userName: string;
   userTitle: string;
 };

@@ -1,3 +1,4 @@
+import { APP_ROUTES } from "@/constants/app-routes";
 import { DeveloperProfileAction, DeveloperUtilityAction } from "./types";
 
 export const developerUtilityActions: DeveloperUtilityAction[] = [
@@ -7,7 +8,7 @@ export const developerUtilityActions: DeveloperUtilityAction[] = [
 ];
 
 export const developerProfileActions: Omit<DeveloperProfileAction, "onSelect">[] = [
-  { label: "Profile", icon: "user", href: "/user-accounts" },
-  { label: "Settings", icon: "settings", href: "/web-app-settings" },
-  { label: "Logout", icon: "logout", href: "/login", destructive: true },
+  { label: "Profile", icon: "user", href: APP_ROUTES.developer.userAccounts },
+  { label: "Settings", icon: "settings", href: APP_ROUTES.developer.webAppSettings },
+  { label: "Logout", icon: "logout", href: APP_ROUTES.login, destructive: true },
 ];
