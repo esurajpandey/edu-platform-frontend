@@ -1,7 +1,9 @@
 "use client";
-
 import { useState } from "react";
 import { Button, Checkbox, EduPlatformLogo, Icon, InputBox } from "@/components";
+import { useAuthStore } from "@/store/auth/auth.store";
+import { useRouter } from "next/navigation";
+import { APP_ROUTES } from "@/constants/app-routes";
 
 const highlights = [
   "Centralized school operations and access management",
@@ -10,15 +12,20 @@ const highlights = [
 ];
 
 export default function LoginPage() {
+  const { onLogin } = useAuthStore();
+  const router = useRouter();
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError("Login is not available yet. Connect the real authentication API to enable sign in.");
+    const payload = { loginId: userId, password };
+    const result = await onLogin(payload);
+    if (result.success) {
+      router.push(APP_ROUTES.user);
+    }
   };
-
   return (
     <main className="min-h-screen bg-base px-3 py-3 text-text sm:px-6 lg:h-screen lg:overflow-hidden lg:px-8 lg:py-6">
       <div className="mx-auto grid min-h-[calc(100vh-1.5rem)] max-w-[1360px] overflow-hidden rounded-[28px] border border-surfaceSoft bg-surface shadow-[0_24px_80px_rgba(31,41,55,0.08)] lg:h-full lg:min-h-0 lg:grid-cols-[1.05fr_0.95fr]">

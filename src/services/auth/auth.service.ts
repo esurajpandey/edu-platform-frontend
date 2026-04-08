@@ -1,5 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import { LoginPayload, LoginResponse, UserResponse } from "./auth.type";
+import { SuccessResponse, ErrorResponse } from "@/types/api.types";
 export const authService = {
   /**
    * Sends credentials to the server.
@@ -32,7 +33,7 @@ export const authService = {
   /**
    * Clears the session on the server and local state.
    */
-  logout: async (): Promise<void> => {
+  logout: async (): Promise<SuccessResponse | ErrorResponse> => {
     return apiClient.post("/auth/logout");
   },
 };
