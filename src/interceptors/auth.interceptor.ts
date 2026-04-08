@@ -1,74 +1,36 @@
-import axios, {
-  AxiosHeaders,
-  AxiosInstance,
-  InternalAxiosRequestConfig,
-} from "axios";
+import axios, { AxiosHeaders, AxiosInstance, InternalAxiosRequestConfig } from "axios";
 import { env } from "@/config/env";
-
-type AuthStoreModule = typeof import("@/store/auth/auth.store");
+import { getAccessToken, setAccessToken, useAuthStore } from "@/store/auth/auth.store";
+import { RefreshTokenResponse } from "@/services/auth/auth.type";
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
   skipAuthRefresh?: boolean;
 }
 
-interface RefreshResponse {
-  success: boolean;
-  accessToken?: string;
-  data?: {
-    accessToken?: string;
-  };
-}
-
 const REFRESH_ENDPOINT = "/auth/refresh";
-
-let isConfigured = false;
+const configuredClients = new WeakSet<AxiosInstance>();
 let refreshPromise: Promise<string | undefined> | null = null;
 
-const getAuthStore = async (): Promise<AuthStoreModule["useAuthStore"] | null> => {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  const authStoreModule = await import("@/store/auth/auth.store");
-  return authStoreModule.useAuthStore;
-};
-
-const getStoredAccessToken = async (): Promise<string | undefined> => {
-  const authStore = await getAuthStore();
-  return authStore?.getState().accessToken;
-};
-
 const setStoredAccessToken = async (accessToken: string | undefined): Promise<void> => {
-  const authStore = await getAuthStore();
-
-  if (!authStore) return;
-
-  authStore.setState((state) => ({
+  setAccessToken(accessToken);
+  useAuthStore.setState((state) => ({
     ...state,
-    accessToken,
     isAuthenticated: accessToken ? true : state.isAuthenticated,
   }));
 };
 
 const clearStoredAuth = async (): Promise<void> => {
-  const authStore = await getAuthStore();
-
-  if (!authStore) return;
-
-  authStore.setState((state) => ({
+  setAccessToken(undefined);
+  useAuthStore.setState((state) => ({
     ...state,
     user: null,
     isAuthenticated: false,
-    accessToken: undefined,
   }));
 };
 
-const extractAccessToken = (payload: RefreshResponse): string | undefined =>
-  payload.data?.accessToken ?? payload.accessToken;
-
 const refreshAccessToken = async (): Promise<string | undefined> => {
-  const response = await axios.post<RefreshResponse>(
+  const response = await axios.post<RefreshTokenResponse>(
     `${env.NEXT_PUBLIC_API_BASE_URL}${REFRESH_ENDPOINT}`,
     {},
     {
@@ -80,14 +42,14 @@ const refreshAccessToken = async (): Promise<string | undefined> => {
     },
   );
 
-  const accessToken = extractAccessToken(response.data);
+  const accessToken = response.data.data.accessToken;
   await setStoredAccessToken(accessToken);
 
   return accessToken;
 };
 
 export const setupApiInterceptors = (client: AxiosInstance): void => {
-  if (isConfigured) return;
+  if (configuredClients.has(client)) return;
 
   client.interceptors.request.use(async (config) => {
     const requestConfig = config as RetryableRequestConfig;
@@ -96,7 +58,7 @@ export const setupApiInterceptors = (client: AxiosInstance): void => {
       return requestConfig;
     }
 
-    const accessToken = await getStoredAccessToken();
+    const accessToken = getAccessToken();
 
     if (!accessToken) {
       return requestConfig;
@@ -154,5 +116,5 @@ export const setupApiInterceptors = (client: AxiosInstance): void => {
     },
   );
 
-  isConfigured = true;
+  configuredClients.add(client);
 };

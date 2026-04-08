@@ -1,4 +1,5 @@
 import { SuccessResponse } from "@/types/api.types";
+
 export interface LoginPayload {
   loginId: string;
   password: string;
@@ -19,5 +20,10 @@ export interface LoginData {
   accessToken: string;
 }
 
+export interface RefreshTokenData {
+  accessToken: string;
+}
+
 export type UserResponse = SuccessResponse<User>;
 export type LoginResponse = SuccessResponse<LoginData>;
+export type RefreshTokenResponse = SuccessResponse<RefreshTokenData>;

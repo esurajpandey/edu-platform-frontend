@@ -7,8 +7,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { logout } = useAuthStore();
   const handleLogout = async () => {
-    const result = await logout();
-    if (result.success) router.push(APP_ROUTES.login);
+    await logout();
+    router.push(APP_ROUTES.login);
   };
   return (
     <div className="min-h-screen flexbg-base ">

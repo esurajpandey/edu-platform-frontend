@@ -1,6 +1,7 @@
 import { apiClient } from "@/lib/api-client";
-import { LoginPayload, LoginResponse, UserResponse } from "./auth.type";
+import { LoginPayload, LoginResponse, RefreshTokenResponse, UserResponse } from "./auth.type";
 import { SuccessResponse, ErrorResponse } from "@/types/api.types";
+
 export const authService = {
   /**
    * Sends credentials to the server.
@@ -25,8 +26,8 @@ export const authService = {
    * Triggers a token refresh.
    * Usually called by an Axios interceptor when a 401 is detected.
    */
-  refreshToken: async (): Promise<{ success: boolean }> => {
-    const response = await apiClient.post<{ success: boolean }>("/auth/refresh");
+  refreshToken: async (): Promise<RefreshTokenResponse> => {
+    const response = await apiClient.post<RefreshTokenResponse>("/auth/refresh");
     return response.data;
   },
 

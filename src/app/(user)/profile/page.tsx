@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useUserStore } from "@/store/user/user.store";
+import { useAuthStore } from "@/store/auth/auth.store";
 
 export default function ProfilePage() {
-  const { user, fetchMe } = useUserStore();
+  const { user, fetchMe } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -34,9 +34,7 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <h2 className="mb-4 text-2xl font-bold">
-        Welcome, {user?.name || user?.user?.name || "Guest"}!
-      </h2>
+      <h2 className="mb-4 text-2xl font-bold">Welcome, {user?.name || "Guest"}!</h2>
       <div className="rounded-xl bg-surface p-4 shadow">
         {isLoading ? (
           <p className="text-textLight">Loading profile...</p>
