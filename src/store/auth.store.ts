@@ -1,7 +1,6 @@
 import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { DEMO_AUTH_COOKIE } from "@/constants/auth";
 import { Permission } from "@/constants/permissions";
 import { Role } from "@/constants/roles";
 import {
@@ -68,19 +67,6 @@ const initialState = {
   activeSchoolId: null as string | null,
   activeSchool: null as SchoolDetails | null,
 };
-
-function setDemoCookie(value: "1" | "") {
-  if (typeof document === "undefined") {
-    return;
-  }
-
-  if (value) {
-    document.cookie = `${DEMO_AUTH_COOKIE}=${value}; path=/; max-age=31536000`;
-    return;
-  }
-
-  document.cookie = `${DEMO_AUTH_COOKIE}=; path=/; max-age=0`;
-}
 
 function getResolvedPermissions(
   roleAssignments: RoleAssignment[],
@@ -151,8 +137,6 @@ export const useAuthStore = create<AuthState>()(
           activeSchool,
         });
 
-        setDemoCookie("1");
-
         return getDefaultHomePath(
           session.roleAssignments,
           session.primaryRole,
@@ -196,7 +180,6 @@ export const useAuthStore = create<AuthState>()(
           ...initialState,
           hasHydrated: true,
         });
-        setDemoCookie("");
       },
     }),
     {
