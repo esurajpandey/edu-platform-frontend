@@ -1,5 +1,6 @@
 import axios from "axios";
 import { env } from "@/config/env";
+import { setupApiInterceptors } from "@/interceptors";
 
 export const apiClient = axios.create({
   baseURL: env.NEXT_PUBLIC_API_BASE_URL,
@@ -10,3 +11,5 @@ export const apiClient = axios.create({
     Accept: "application/json",
   },
 });
+
+setupApiInterceptors(apiClient);
