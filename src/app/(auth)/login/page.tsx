@@ -1,10 +1,9 @@
 "use client";
-
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button, Checkbox, EduPlatformLogo, Icon, InputBox } from "@/components";
-import { authenticateMockUser, MOCK_USER_CREDENTIALS } from "@/mocks/mock-users";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/store/auth/auth.store";
+import { useRouter } from "next/navigation";
+import { APP_ROUTES } from "@/constants/app-routes";
 
 const highlights = [
   "Centralized school operations and access management",
@@ -13,26 +12,20 @@ const highlights = [
 ];
 
 export default function LoginPage() {
+  const { onLogin } = useAuthStore();
   const router = useRouter();
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const matchedUser = authenticateMockUser(userId, password);
-
-    if (!matchedUser) {
-      setError("Invalid user ID or password. Use one of the demo accounts below.");
-      return;
+    const payload = { loginId: userId, password };
+    const result = await onLogin(payload);
+    if (result.success) {
+      router.push(APP_ROUTES.user);
     }
-
-    setError("");
-    const homePath = useAuthStore.getState().hydrateSession(matchedUser.session);
-    router.push(homePath);
   };
-
   return (
     <main className="min-h-screen bg-base px-3 py-3 text-text sm:px-6 lg:h-screen lg:overflow-hidden lg:px-8 lg:py-6">
       <div className="mx-auto grid min-h-[calc(100vh-1.5rem)] max-w-[1360px] overflow-hidden rounded-[28px] border border-surfaceSoft bg-surface shadow-[0_24px_80px_rgba(31,41,55,0.08)] lg:h-full lg:min-h-0 lg:grid-cols-[1.05fr_0.95fr]">
@@ -169,34 +162,8 @@ export default function LoginPage() {
                   <span className="text-xs text-textMuted">Protected session</span>
                 </div>
 
-                <Button type="submit" fullWidth size="lg" label="Sign in to preview workspace" />
+                <Button type="submit" fullWidth size="lg" label="Sign in" />
               </form>
-              {/* THis will remove - this will be used for demo login  */}
-              <div className="mt-5 rounded-[22px] border border-surfaceSoft bg-base px-4 py-3 lg:px-5 lg:py-4">
-                <p className="text-sm font-semibold text-text">Demo Users</p>
-                <div className="mt-3 space-y-2">
-                  {MOCK_USER_CREDENTIALS.map((credential) => (
-                    <button
-                      key={credential.userId}
-                      type="button"
-                      onClick={() => {
-                        setUserId(credential.userId);
-                        setPassword(credential.password);
-                        setError("");
-                      }}
-                      className="flex w-full items-center justify-between rounded-2xl border border-surfaceSoft bg-surface px-3 py-2 text-left transition hover:border-primary/30"
-                    >
-                      <span>
-                        <span className="block text-sm font-medium text-text">
-                          {credential.label}
-                        </span>
-                        <span className="block text-xs text-textLight">{credential.userId}</span>
-                      </span>
-                      <span className="text-xs text-textMuted">Tap to fill</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
 
               <div className="mt-5 rounded-[22px] border border-surfaceSoft bg-base px-4 py-3 lg:px-5 lg:py-4">
                 <div className="flex items-start gap-3">
@@ -205,10 +172,11 @@ export default function LoginPage() {
                   </span>
                   <div>
                     <p className="text-sm font-semibold text-text lg:text-[15px]">
-                      Need onboarding support?
+                      Need access support?
                     </p>
                     <p className="mt-1 text-sm leading-5 text-textLight lg:text-[15px]">
-                      Reach your admin for activation or role access help.
+                      Reach your admin for activation or role access help. Real authentication still
+                      needs to be connected for this screen.
                     </p>
                   </div>
                 </div>

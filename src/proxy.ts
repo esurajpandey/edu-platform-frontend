@@ -1,18 +1,32 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { DEMO_AUTH_COOKIE } from "@/constants/auth";
 
-// This function can be marked `async` if using `await` inside
 export function proxy(request: NextRequest) {
-  const token = request.cookies.get("token")?.value;
-  const demoAuth = request.cookies.get(DEMO_AUTH_COOKIE)?.value;
-  if (!token && demoAuth !== "1") {
+  const cookie = request.cookies.get("refreshToken");
+  const { pathname } = request.nextUrl;
+
+  // 1. If user is logged in and tries to access /login, send them to /profile
+  if (pathname === "/login" && cookie?.value) {
+    return NextResponse.redirect(new URL("/profile", request.url));
+  }
+
+  // 2. If user is NOT logged in and tries to access ANY protected route
+  // BUT make sure we don't redirect them if they are already going to /login
+  if (!cookie?.value && pathname !== "/login") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
+
   return NextResponse.next();
 }
 
-// See "Matching Paths" - to protect routes
 export const config = {
-  matcher: ["/developer/:path*", "/school/:path*"],
+  matcher: [
+    "/login",
+    "/developer/:path*",
+    "/school/:path*",
+    "/student/:path*",
+    "/teacher/:path*",
+    "/profile/:path*",
+    "/dashboard/:path*",
+  ],
 };

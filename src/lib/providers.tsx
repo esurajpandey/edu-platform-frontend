@@ -2,6 +2,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactNode, useState } from "react";
+import { isDev } from "@/config/env";
+
 export default function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
     () =>
@@ -19,7 +21,7 @@ export default function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
+      {isDev && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }
