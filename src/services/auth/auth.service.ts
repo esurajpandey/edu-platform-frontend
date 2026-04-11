@@ -27,7 +27,7 @@ export const authService = {
    * Usually called by an Axios interceptor when a 401 is detected.
    */
   refreshToken: async (): Promise<RefreshTokenResponse> => {
-    const response = await apiClient.post<RefreshTokenResponse>("/auth/refresh");
+    const response = await apiClient.post<RefreshTokenResponse>("/auth/refresh", {});
     return response.data;
   },
 

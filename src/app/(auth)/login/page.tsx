@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Checkbox, EduPlatformLogo, Icon, InputBox } from "@/components";
 import { useAuthStore } from "@/store/auth/auth.store";
 import { useRouter } from "next/navigation";
-import { APP_ROUTES } from "@/constants/app-routes";
+import { getHomeRouteForSystemRole } from "@/lib/auth-redirect";
 
 const highlights = [
   "Centralized school operations and access management",
@@ -20,11 +20,15 @@ export default function LoginPage() {
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError("");
     const payload = { loginId: userId, password };
     const result = await onLogin(payload);
-    if (result.success) {
-      router.push(APP_ROUTES.user);
+    if (result.success && "data" in result) {
+      router.push(getHomeRouteForSystemRole(result.data.user.systemRole));
+      return;
     }
+
+    setError(result.message || "Unable to sign in. Please try again.");
   };
   return (
     <main className="min-h-screen bg-base px-3 py-3 text-text sm:px-6 lg:h-screen lg:overflow-hidden lg:px-8 lg:py-6">

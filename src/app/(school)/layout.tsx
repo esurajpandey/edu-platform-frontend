@@ -1,5 +1,4 @@
 import DefaultLayout from "@/layouts/default";
-
-export default function DeveloperLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <DefaultLayout>{children}</DefaultLayout>;
 }
