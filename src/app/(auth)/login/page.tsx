@@ -23,7 +23,7 @@ export default function LoginPage() {
     const payload = { loginId: userId, password };
     const result = await onLogin(payload);
     if (result.success) {
-      router.push(APP_ROUTES.user);
+      router.push(APP_ROUTES.user.dashboard);
     }
   };
   return (

@@ -1,1 +1,3 @@
-export { default } from "./default/page";
+export default function MainPage() {
+  return <div>Welcome</div>;
+}
