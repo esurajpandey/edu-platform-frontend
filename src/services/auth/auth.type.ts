@@ -12,6 +12,7 @@ export interface User {
   systemRole: string;
   username: string;
   status: string;
+  schools: unknown[];
 }
 export interface LoginData {
   session: {
@@ -24,6 +25,10 @@ export interface RefreshTokenData {
   accessToken: string;
 }
 
-export type UserResponse = SuccessResponse<User>;
+export interface MeResponseData {
+  user: User;
+}
+
+export type UserResponse = SuccessResponse<MeResponseData>;
 export type LoginResponse = SuccessResponse<LoginData>;
 export type RefreshTokenResponse = SuccessResponse<RefreshTokenData>;

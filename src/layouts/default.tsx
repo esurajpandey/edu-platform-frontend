@@ -5,13 +5,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { getMenuList } from "../constants/project.menu";
 import { Header, MobileDrawer, Sidebar, ProfileActions, UtilityActions } from "@/components/layout";
 import { useAuthStore } from "@/store/auth/auth.store";
-export default function DeveloperLayout({ children }: { children: ReactNode }) {
-  const role = "user";
+import { getHomeRouteForSystemRole } from "@/lib/auth-redirect";
+export default function Layout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { user, logout } = useAuthStore();
+  const role = user?.systemRole?.toUpperCase() === "DEVELOPER" ? "developer" : "user";
   const menu = useMemo(() => getMenuList(role), [role]);
-  const { user, fetchMe, logout } = useAuthStore();
-  const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   useEffect(() => {
     for (const item of menu) {
@@ -19,22 +19,19 @@ export default function DeveloperLayout({ children }: { children: ReactNode }) {
     }
   }, [menu, router]);
   const activeItem = menu.find((item) => item.path === pathname) ?? menu[0];
-
   useEffect(() => {
-    let isActive = true;
-    const loadProfile = async () => {
-      setIsLoading(true);
-      await fetchMe();
-      if (!isActive) return;
-      setIsLoading(false);
-    };
-    void loadProfile();
-    return () => {
-      isActive = false;
-    };
-  }, [fetchMe]);
+    if (!user?.systemRole) {
+      return;
+    }
+
+    if (pathname === APP_ROUTES.user.dashboard && user.systemRole.toUpperCase() === "DEVELOPER") {
+      router.replace(getHomeRouteForSystemRole(user.systemRole));
+    }
+  }, [pathname, router, user?.systemRole]);
+
   const userName = user?.name ?? "User";
-  const userTitle = "Platform Administrator";
+  const userTitle =
+    user?.systemRole?.toUpperCase() === "DEVELOPER" ? "Platform Administrator" : "School Workspace";
   const userInitials = "PU";
   const profileActions = ProfileActions.map((action) => ({
     ...action,

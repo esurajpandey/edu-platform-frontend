@@ -7,12 +7,14 @@ export const metadata: Metadata = {
   description: "School Management System",
   keywords: ["school", "management", "education", "admin", "students"],
 };
-
+import { AuthProvider } from "@/components/providers/auth-provider";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AuthProvider>{children}</AuthProvider>
+        </Providers>
       </body>
     </html>
   );

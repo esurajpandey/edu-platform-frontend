@@ -1,33 +1,28 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { LoginPayload, User, UserResponse } from "@/services/auth/auth.type";
+import axios from "axios";
+import { User, LoginPayload, UserResponse } from "@/services/auth/auth.type";
+import { ErrorResponse } from "@/types/api.types";
 import { authService } from "@/services/auth/auth.service";
-import { SuccessResponse, ErrorResponse } from "@/types/api.types";
 
 let accessTokenMemory: string | undefined;
+let bootstrapPromise: Promise<boolean> | null = null;
 
-export const getAccessToken = (): string | undefined => accessTokenMemory;
-export const setAccessToken = (token?: string): void => {
+export const getAccessToken = () => accessTokenMemory;
+export const setAccessToken = (token?: string) => {
   accessTokenMemory = token;
 };
-
-const clearAccessToken = (): void => {
-  accessTokenMemory = undefined;
-};
-
-interface FetchMeErrorResponse {
-  error: string;
-  message: string;
-  success: false;
-  data: null;
-}
 
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  onLogin: (credentials: LoginPayload) => Promise<SuccessResponse | ErrorResponse>;
-  fetchMe: () => Promise<UserResponse | FetchMeErrorResponse>;
-  logout: () => Promise<SuccessResponse | ErrorResponse>;
+  isBootstrapping: boolean;
+  hasBootstrapped: boolean;
+  onLogin: (credentials: LoginPayload) => Promise<UserResponse | ErrorResponse>;
+  onRefresh: (options?: { silent?: boolean }) => Promise<boolean>;
+  bootstrapAuth: () => Promise<boolean>;
+  fetchMe: () => Promise<UserResponse | ErrorResponse>;
+  clearSession: () => void;
+  logout: () => Promise<void>;
 }
 
 const initialData = {
@@ -35,62 +30,123 @@ const initialData = {
   isAuthenticated: false,
 };
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      ...initialData,
-      onLogin: async (credentials: LoginPayload) => {
-        try {
-          const response = await authService.login(credentials);
-          setAccessToken(response.data.accessToken);
-          set({
-            user: response.data.session.user,
-            isAuthenticated: true,
-          });
-          return response;
-        } catch (error) {
-          console.error("Login failed:", error);
-          clearAccessToken();
-          return { success: false, message: "Login failed", data: null };
-        }
-      },
-      fetchMe: async () => {
-        try {
-          const response = await authService.getMe();
-          set({
-            user: response.data,
-            isAuthenticated: true,
-          });
-          return response;
-        } catch (error) {
-          console.error("Fetching profile failed:", error);
-          set({ ...initialData });
-          return {
-            success: false,
-            message: "Failed to fetch user",
-            error: "FETCH_ME_FAILED",
-            data: null,
-          };
-        }
-      },
-      logout: async () => {
-        try {
-          const result = await authService.logout();
-          clearAccessToken();
-          set({ ...initialData });
-          return result;
-        } catch (error) {
-          console.error("Logout failed:", error);
-          return { success: false, message: "Logout failed", data: null };
-        }
-      },
-    }),
-    {
-      name: "auth-storage",
-      partialize: (state) => ({
+export const useAuthStore = create<AuthState>()((set, get) => ({
+  ...initialData,
+  isBootstrapping: false,
+  hasBootstrapped: false,
+
+  onLogin: async (credentials) => {
+    try {
+      const response = await authService.login(credentials);
+      setAccessToken(response.data.accessToken);
+      const profile = await get().fetchMe();
+
+      if (!profile.success) {
+        get().clearSession();
+        return profile;
+      }
+
+      return profile;
+    } catch (error) {
+      console.error("Login failed:", error);
+      setAccessToken(undefined);
+      set({ ...initialData });
+      return {
+        error: "LOGIN_FAILED",
+        success: false,
+        message: error instanceof Error ? error.message : "Login failed",
+      };
+    }
+  },
+
+  fetchMe: async () => {
+    try {
+      const response = await authService.getMe();
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        hasBootstrapped: true,
+      });
+      return response;
+    } catch (error) {
+      console.error("Fetching profile failed:", error);
+      setAccessToken(undefined);
+      set({ ...initialData });
+      return {
+        error: "Failed to fetch user profile",
+        message: error instanceof Error ? error.message : "Unknown error",
+        success: false,
+      };
+    }
+  },
+
+  onRefresh: async (options) => {
+    try {
+      const response = await authService.refreshToken();
+      setAccessToken(response.data.accessToken);
+      set((state) => ({
         user: state.user,
-        isAuthenticated: state.isAuthenticated,
-      }),
-    },
-  ),
-);
+        isAuthenticated: true,
+        hasBootstrapped: state.hasBootstrapped,
+      }));
+      return true;
+    } catch (error) {
+      const isExpectedRefreshMiss =
+        axios.isAxiosError(error) &&
+        (error.response?.status === 400 || error.response?.status === 401);
+
+      if (!options?.silent && !isExpectedRefreshMiss) {
+        console.error("Token refresh failed:", error);
+      }
+
+      setAccessToken(undefined);
+      set({ ...initialData });
+      return false;
+    }
+  },
+
+  bootstrapAuth: async () => {
+    if (get().hasBootstrapped) {
+      return get().isAuthenticated;
+    }
+
+    if (bootstrapPromise) {
+      return bootstrapPromise;
+    }
+
+    set({ isBootstrapping: true });
+
+    bootstrapPromise = (async () => {
+      try {
+        if (!getAccessToken()) {
+          const didRefresh = await get().onRefresh({ silent: true });
+          if (!didRefresh) {
+            set({ hasBootstrapped: true });
+            return false;
+          }
+        }
+
+        const profile = await get().fetchMe();
+        return profile.success;
+      } finally {
+        set({ isBootstrapping: false, hasBootstrapped: true });
+        bootstrapPromise = null;
+      }
+    })();
+
+    return bootstrapPromise;
+  },
+
+  clearSession: () => {
+    setAccessToken(undefined);
+    set({ ...initialData, hasBootstrapped: true });
+  },
+
+  logout: async () => {
+    try {
+      await authService.logout();
+    } finally {
+      get().clearSession();
+    }
+  },
+}));

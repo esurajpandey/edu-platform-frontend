@@ -4,7 +4,7 @@ export interface MenuItem {
   path: string;
   icon: IconName;
   description: string;
-  rbacId: string;
+  rbacId?: string;
 }
 
 export type SidebarProps = {

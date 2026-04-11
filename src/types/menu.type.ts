@@ -3,5 +3,5 @@ export interface MenuItem {
   path: string;
   icon: string;
   description: string;
-  rbacId: string;
+  rbacId?: string;
 }
