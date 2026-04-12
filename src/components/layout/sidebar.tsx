@@ -127,21 +127,16 @@ export default function DeveloperSidebar({
             aria-current={isSettingsActive ? 'page' : undefined}
             onClick={onNavigate}
           >
-            <span
-              className={cn(
-                'flex h-8 w-8 items-center justify-center rounded-xl transition',
-                isSettingsActive ? 'bg-surface/15' : 'bg-surfaceSoft text-textLight',
-              )}
-            >
+            <div className="flex items-center gap-2 px-2 py-1">
               <Icon
                 name="settings"
                 size="tiny"
                 color={isSettingsActive ? 'surface' : 'textLight'}
               />
-            </span>
-            <span>
-              <span>Settings</span>
-            </span>
+              <span>
+                <span>Settings</span>
+              </span>
+            </div>
           </Link>
           <button
             type="button"
