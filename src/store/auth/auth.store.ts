@@ -1,10 +1,11 @@
-import { create } from "zustand";
-import axios from "axios";
-import { User } from "@/types/user.type";
-import { LoginPayload, UserResponse } from "@/services/auth/auth.type";
-import { ErrorResponse } from "@/types/api.types";
-import authServices from "./auth.services";
-import helper from "@/utils/helper";
+import { create } from 'zustand';
+import axios from 'axios';
+import { User } from '@/types/user.type';
+import { ErrorResponse } from '@/types/api.types';
+import authService from './auth.services';
+import helper from '@/utils/helper';
+import { LoginPayload, FetchUserResponse } from './auth.type';
+
 let accessTokenMemory: string | undefined;
 let bootstrapPromise: Promise<boolean> | null = null;
 
@@ -18,10 +19,10 @@ interface AuthState {
   isAuthenticated: boolean;
   isBootstrapping: boolean;
   hasBootstrapped: boolean;
-  onLogin: (credentials: LoginPayload) => Promise<UserResponse | ErrorResponse>;
+  onLogin: (credentials: LoginPayload) => Promise<FetchUserResponse | ErrorResponse>;
   onRefresh: (options?: { silent?: boolean }) => Promise<boolean>;
   bootstrapAuth: () => Promise<boolean>;
-  fetchMe: () => Promise<UserResponse | ErrorResponse>;
+  fetchMe: () => Promise<FetchUserResponse | ErrorResponse>;
   clearSession: () => void;
   logout: () => Promise<ErrorResponse | void>;
 }
@@ -38,9 +39,9 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   onLogin: async (credentials) => {
     try {
-      const response = await authServices.login(credentials);
-      const result = helper.successResponse(response, "Login successful");
-      setAccessToken(result?.data?.accessToken ?? "");
+      const response = await authService.login(credentials);
+      const result = helper.successResponse(response, 'Login successful');
+      setAccessToken(result?.data?.accessToken ?? '');
       const profile = await get().fetchMe();
       if (!profile.success) {
         get().clearSession();
@@ -56,8 +57,8 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   fetchMe: async () => {
     try {
-      const response = await authServices.fetchMe();
-      const result = helper.successResponse(response, "Profile fetched successfully");
+      const response = await authService.fetchMe();
+      const result = helper.successResponse(response, 'Profile fetched successfully');
       set({
         user: result?.data?.user,
         isAuthenticated: true,
@@ -65,17 +66,17 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
       });
       return result;
     } catch (error) {
-      console.error("Fetching profile failed:", error);
+      console.error('Fetching profile failed:', error);
       setAccessToken(undefined);
       set({ ...initialData });
-      return helper.errorResponse(error, "Failed to fetch profile");
+      return helper.errorResponse(error, 'Failed to fetch profile');
     }
   },
 
   onRefresh: async (options) => {
     try {
-      const response = await authServices.refreshToken();
-      const result = helper.successResponse(response, "Token refreshed successfully");
+      const response = await authService.refreshToken();
+      const result = helper.successResponse(response, 'Token refreshed successfully');
       setAccessToken(result?.data?.accessToken);
       set((state) => ({
         user: state.user,
@@ -87,9 +88,8 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
       const isExpectedRefreshMiss = axios.isAxiosError(error) && error.response?.status === 401;
 
       if (!options?.silent && !isExpectedRefreshMiss) {
-        console.error("Token refresh failed:", error);
+        console.error('Token refresh failed:', error);
       }
-
       setAccessToken(undefined);
       set({ ...initialData });
       return false;
@@ -100,11 +100,9 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     if (get().hasBootstrapped) {
       return get().isAuthenticated;
     }
-
     if (bootstrapPromise) {
       return bootstrapPromise;
     }
-
     set({ isBootstrapping: true });
 
     bootstrapPromise = (async () => {
@@ -135,9 +133,9 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   logout: async () => {
     try {
-      await authServices.logout();
+      await authService.logout();
     } catch (error) {
-      return helper.errorResponse(error, "Logout failed");
+      return helper.errorResponse(error, 'Logout failed');
     } finally {
       get().clearSession();
     }
