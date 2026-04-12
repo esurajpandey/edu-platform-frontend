@@ -1,9 +1,14 @@
 'use client';
 import { useEffect, useRef } from 'react';
+import { APP_ROUTES } from '@/constants/app-routes';
 import Link from 'next/link';
 import { EduPlatformLogo, Icon } from '@/components';
 import { cn } from '@/lib/cn';
 import { SidebarProps } from './layout.type';
+
+const isUtilityRoute = (pathname: string) =>
+  pathname === APP_ROUTES.profile || pathname === APP_ROUTES.developer.webAppSettings;
+
 export default function DeveloperSidebar({
   menu,
   pathname,
@@ -34,6 +39,8 @@ export default function DeveloperSidebar({
       });
     }
   }, [pathname]);
+
+  const isSettingsActive = isUtilityRoute(pathname);
 
   return (
     <>
@@ -109,13 +116,33 @@ export default function DeveloperSidebar({
         </div>
 
         <div className="mt-3 flex items-center gap-2">
-          <button
-            type="button"
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-surfaceSoft bg-surface px-3 py-2 text-sm font-medium text-textLight transition hover:border-primary hover:text-primary"
+          <Link
+            href={APP_ROUTES.profile}
+            className={cn(
+              'group flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-1 text-sm font-medium transition',
+              isSettingsActive
+                ? 'border-primary bg-primary text-surface shadow-[0_8px_16px_rgba(91,108,255,0.12)]'
+                : 'border-surfaceSoft bg-surface text-textLight hover:border-primary hover:text-primary',
+            )}
+            aria-current={isSettingsActive ? 'page' : undefined}
+            onClick={onNavigate}
           >
-            <Icon name="settings" size="small" color="textLight" />
-            <span>Settings</span>
-          </button>
+            <span
+              className={cn(
+                'flex h-8 w-8 items-center justify-center rounded-xl transition',
+                isSettingsActive ? 'bg-surface/15' : 'bg-surfaceSoft text-textLight',
+              )}
+            >
+              <Icon
+                name="settings"
+                size="tiny"
+                color={isSettingsActive ? 'surface' : 'textLight'}
+              />
+            </span>
+            <span>
+              <span>Settings</span>
+            </span>
+          </Link>
           <button
             type="button"
             className="flex h-10 w-10 items-center justify-center rounded-xl border border-surfaceSoft bg-surface text-textLight transition hover:border-primary hover:text-primary"

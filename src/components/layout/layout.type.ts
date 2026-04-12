@@ -31,6 +31,10 @@ export type ProfileAction = {
 
 export type HeaderProps = {
   activeItem?: MenuItem;
+  utilityPageMeta?: {
+    name: string;
+    description: string;
+  };
   utilityActions: UtilityAction[];
   onMenuToggle: () => void;
   isMobileMenuOpen: boolean;

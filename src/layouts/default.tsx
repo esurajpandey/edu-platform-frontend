@@ -6,6 +6,25 @@ import { getMenuList } from '../constants/project.menu';
 import { Header, MobileDrawer, Sidebar, ProfileActions, UtilityActions } from '@/components/layout';
 import { useAuthStore } from '@/store/auth/auth.store';
 import { getHomeRouteForSystemRole } from '@/lib/auth-redirect';
+
+const getUtilityPageMeta = (pathname: string) => {
+  if (pathname === APP_ROUTES.profile) {
+    return {
+      name: 'Profile',
+      description: 'Review your workspace identity, account details, and personal settings.',
+    };
+  }
+
+  if (pathname === APP_ROUTES.developer.webAppSettings) {
+    return {
+      name: 'Settings',
+      description: 'Manage workspace preferences and application settings.',
+    };
+  }
+
+  return undefined;
+};
+
 export default function Layout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -18,7 +37,8 @@ export default function Layout({ children }: { children: ReactNode }) {
       router.prefetch(item.path);
     }
   }, [menu, router]);
-  const activeItem = menu.find((item) => item.path === pathname) ?? menu[0];
+  const activeItem = menu.find((item) => item.path === pathname);
+  const utilityPageMeta = getUtilityPageMeta(pathname);
   useEffect(() => {
     if (!user?.systemRole) {
       return;
@@ -60,6 +80,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           <Header
             activeItem={activeItem}
+            utilityPageMeta={utilityPageMeta}
             utilityActions={UtilityActions}
             onMenuToggle={() => setIsMobileMenuOpen((current) => !current)}
             isMobileMenuOpen={isMobileMenuOpen}

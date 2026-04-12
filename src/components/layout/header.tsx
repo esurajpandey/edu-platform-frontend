@@ -6,6 +6,7 @@ import { HeaderProps } from './layout.type';
 
 export default function DeveloperHeader({
   activeItem,
+  utilityPageMeta,
   utilityActions,
   onMenuToggle,
   isMobileMenuOpen,
@@ -13,18 +14,19 @@ export default function DeveloperHeader({
   userName,
   userTitle,
 }: HeaderProps) {
+  const pageTitle = utilityPageMeta?.name ?? activeItem?.name ?? 'Developer control center';
+  const pageDescription =
+    utilityPageMeta?.description ??
+    activeItem?.description ??
+    'Monitor platform health, guide school operations, and keep the team moving.';
+
   return (
     <header className="sticky top-0 z-10 border-b border-surfaceSoft/80 bg-base/90 px-4 py-3 backdrop-blur lg:px-8 lg:py-3">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
         <div className="flex min-w-0 flex-1 items-start justify-between gap-3">
           <div className="min-w-0 max-w-3xl">
-            <h2 className="mt-1 text-xl font-semibold tracking-tight text-text">
-              {activeItem?.name ?? 'Developer control center'}
-            </h2>
-            <p className="mt-1 text-sm text-textLight">
-              {activeItem?.description ??
-                'Monitor platform health, guide school operations, and keep the team moving.'}
-            </p>
+            <h2 className="mt-1 text-xl font-semibold tracking-tight text-text">{pageTitle}</h2>
+            <p className="mt-1 text-sm text-textLight">{pageDescription}</p>
           </div>
 
           <button
