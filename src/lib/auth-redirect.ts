@@ -12,6 +12,7 @@ export function isProtectedAppPath(pathname: string) {
   return (
     pathname.startsWith('/dashboard') ||
     pathname.startsWith('/school') ||
-    pathname.startsWith('/developer')
+    pathname.startsWith('/developer') ||
+    pathname.startsWith('/profile')
   );
 }
