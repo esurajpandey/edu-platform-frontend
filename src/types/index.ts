@@ -1,5 +1,5 @@
-export type { IconColor, IconComponent, IconName, IconRegistry, IconSize } from "./icon.types";
-export type { MenuItem } from "./menu.type";
+export type { IconColor, IconComponent, IconName, IconRegistry, IconSize } from './icon.types';
+export type { MenuItem } from './menu.type';
 export type {
   ButtonIconConfig,
   ButtonTone,
@@ -9,4 +9,4 @@ export type {
   InputTone,
   InputVariant,
   ModalSize,
-} from "./ui.types";
+} from './ui.types';

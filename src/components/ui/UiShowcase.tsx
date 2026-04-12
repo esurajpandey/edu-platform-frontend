@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Button from "./Button";
-import Checkbox from "./Checkbox";
-import DatePicker from "./DatePicker";
-import InputBox from "./InputBox";
-import Modal from "./Modal";
+import { useState } from 'react';
+import Button from './Button';
+import Checkbox from './Checkbox';
+import DatePicker from './DatePicker';
+import InputBox from './InputBox';
+import Modal from './Modal';
 
 export default function UiShowcase() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,7 +33,7 @@ export default function UiShowcase() {
               label="Open modal"
               variant="soft"
               tone="primary"
-              leadingIcon={{ name: "plus" }}
+              leadingIcon={{ name: 'plus' }}
               onClick={() => setIsModalOpen(true)}
             />
           </div>

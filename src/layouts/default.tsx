@@ -1,16 +1,16 @@
-"use client";
-import { ReactNode, useEffect, useMemo, useState } from "react";
-import { APP_ROUTES } from "@/constants/app-routes";
-import { usePathname, useRouter } from "next/navigation";
-import { getMenuList } from "../constants/project.menu";
-import { Header, MobileDrawer, Sidebar, ProfileActions, UtilityActions } from "@/components/layout";
-import { useAuthStore } from "@/store/auth/auth.store";
-import { getHomeRouteForSystemRole } from "@/lib/auth-redirect";
+'use client';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { APP_ROUTES } from '@/constants/app-routes';
+import { usePathname, useRouter } from 'next/navigation';
+import { getMenuList } from '../constants/project.menu';
+import { Header, MobileDrawer, Sidebar, ProfileActions, UtilityActions } from '@/components/layout';
+import { useAuthStore } from '@/store/auth/auth.store';
+import { getHomeRouteForSystemRole } from '@/lib/auth-redirect';
 export default function Layout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuthStore();
-  const role = user?.systemRole?.toUpperCase() === "DEVELOPER" ? "developer" : "user";
+  const role = user?.systemRole?.toUpperCase() === 'DEVELOPER' ? 'developer' : 'user';
   const menu = useMemo(() => getMenuList(role), [role]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   useEffect(() => {
@@ -24,20 +24,20 @@ export default function Layout({ children }: { children: ReactNode }) {
       return;
     }
 
-    if (pathname === APP_ROUTES.user.dashboard && user.systemRole.toUpperCase() === "DEVELOPER") {
+    if (pathname === APP_ROUTES.user.dashboard && user.systemRole.toUpperCase() === 'DEVELOPER') {
       router.replace(getHomeRouteForSystemRole(user.systemRole));
     }
   }, [pathname, router, user?.systemRole]);
 
-  const userName = user?.name ?? "User";
+  const userName = user?.name ?? 'User';
   const userTitle =
-    user?.systemRole?.toUpperCase() === "DEVELOPER" ? "Platform Administrator" : "School Workspace";
-  const userInitials = "PU";
+    user?.systemRole?.toUpperCase() === 'DEVELOPER' ? 'Platform Administrator' : 'School Workspace';
+  const userInitials = 'PU';
   const profileActions = ProfileActions.map((action) => ({
     ...action,
     onSelect: async () => {
       setIsMobileMenuOpen(false);
-      if (action.label === "Logout") {
+      if (action.label === 'Logout') {
         await logout();
         router.replace(APP_ROUTES.login);
       }

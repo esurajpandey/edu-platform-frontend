@@ -1,4 +1,4 @@
-import { IconName } from "@/types";
+import { IconName } from '@/types';
 export interface MenuItem {
   name: string;
   path: string;

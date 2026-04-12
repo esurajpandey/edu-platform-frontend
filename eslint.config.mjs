@@ -1,13 +1,13 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
 
 const COLOR_UTILITY_PREFIX =
-  "(?:bg|text|border|from|to|via|ring|stroke|fill|outline|decoration|caret|accent)";
+  '(?:bg|text|border|from|to|via|ring|stroke|fill|outline|decoration|caret|accent)';
 const TAILWIND_DEFAULT_COLOR =
-  "(?:black|white|slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)(?:-[0-9]{2,3})?";
+  '(?:black|white|slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)(?:-[0-9]{2,3})?';
 const SEMANTIC_COLOR =
-  "(?:transparent|current|inherit|primary|primaryDark|primaryLight|base|surface|surfaceSoft|text|textLight|textMuted|danger)(?:\\/[0-9]{1,3})?";
+  '(?:transparent|current|inherit|primary|primaryDark|primaryLight|base|surface|surfaceSoft|text|textLight|textMuted|danger)(?:\\/[0-9]{1,3})?';
 const DEFAULT_COLOR_CLASS_RE = new RegExp(
   `\\b${COLOR_UTILITY_PREFIX}-${TAILWIND_DEFAULT_COLOR}\\b`,
 );
@@ -20,12 +20,12 @@ const UNKNOWN_COLOR_UTILITY_RE = new RegExp(
 
 const tailwindColorRestrictionPlugin = {
   rules: {
-    "no-random-tailwind-colors": {
+    'no-random-tailwind-colors': {
       meta: {
-        type: "problem",
+        type: 'problem',
         docs: {
           description:
-            "Disallow default Tailwind/random color values and enforce semantic project colors.",
+            'Disallow default Tailwind/random color values and enforce semantic project colors.',
         },
       },
       create(context) {
@@ -34,21 +34,21 @@ const tailwindColorRestrictionPlugin = {
             return [];
           }
 
-          if (attributeValue.type === "Literal" && typeof attributeValue.value === "string") {
+          if (attributeValue.type === 'Literal' && typeof attributeValue.value === 'string') {
             return [attributeValue];
           }
 
           if (
-            attributeValue.type === "JSXExpressionContainer" &&
-            attributeValue.expression.type === "TemplateLiteral"
+            attributeValue.type === 'JSXExpressionContainer' &&
+            attributeValue.expression.type === 'TemplateLiteral'
           ) {
             return attributeValue.expression.quasis;
           }
 
           if (
-            attributeValue.type === "JSXExpressionContainer" &&
-            attributeValue.expression.type === "Literal" &&
-            typeof attributeValue.expression.value === "string"
+            attributeValue.type === 'JSXExpressionContainer' &&
+            attributeValue.expression.type === 'Literal' &&
+            typeof attributeValue.expression.value === 'string'
           ) {
             return [attributeValue.expression];
           }
@@ -57,20 +57,20 @@ const tailwindColorRestrictionPlugin = {
         }
 
         function getTextFromNode(node) {
-          if (node.type === "TemplateElement") {
+          if (node.type === 'TemplateElement') {
             return node.value.raw;
           }
 
-          if (typeof node.value === "string") {
+          if (typeof node.value === 'string') {
             return node.value;
           }
 
-          return "";
+          return '';
         }
 
         return {
           JSXAttribute(node) {
-            if (node.name.type !== "JSXIdentifier" || node.name.name !== "className") {
+            if (node.name.type !== 'JSXIdentifier' || node.name.name !== 'className') {
               return;
             }
 
@@ -86,7 +86,7 @@ const tailwindColorRestrictionPlugin = {
               ) {
                 context.report({
                   node: classValueNode,
-                  message: "Use semantic colors defined in src/app/globals.css @theme only.",
+                  message: 'Use semantic colors defined in src/app/globals.css @theme only.',
                 });
               }
             }
@@ -101,23 +101,23 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
+    files: ['**/*.{js,jsx,ts,tsx}'],
     plugins: {
-      "tailwind-restrict": tailwindColorRestrictionPlugin,
+      'tailwind-restrict': tailwindColorRestrictionPlugin,
     },
     rules: {
-      "tailwind-restrict/no-random-tailwind-colors": "error",
-      "no-console": ["error", { allow: ["warn", "error"] }],
-      "no-debugger": "error",
+      'tailwind-restrict/no-random-tailwind-colors': 'error',
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+      'no-debugger': 'error',
     },
   },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
   ]),
 ]);
 

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { APP_ROUTES } from "@/constants/app-routes";
-import { getHomeRouteForSystemRole, isProtectedAppPath } from "@/lib/auth-redirect";
-import { useAuthStore, getAccessToken } from "@/store/auth/auth.store";
-import { Loader } from "@/components";
+import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { APP_ROUTES } from '@/constants/app-routes';
+import { getHomeRouteForSystemRole, isProtectedAppPath } from '@/lib/auth-redirect';
+import { useAuthStore, getAccessToken } from '@/store/auth/auth.store';
+import { Loader } from '@/components';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

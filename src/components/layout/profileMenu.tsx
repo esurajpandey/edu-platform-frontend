@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Icon } from "@/components";
-import { cn } from "@/lib/cn";
-import { ProfileAction } from "./layout.type";
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Icon } from '@/components';
+import { cn } from '@/lib/cn';
+import { ProfileAction } from './layout.type';
 
 type DeveloperProfileMenuProps = {
   actions: ProfileAction[];
@@ -35,17 +35,17 @@ export default function DeveloperProfileMenu({
     };
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("keydown", handleEscape);
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleEscape);
 
     return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [isOpen]);
 
@@ -76,8 +76,8 @@ export default function DeveloperProfileMenu({
         </span>
         <span
           className={cn(
-            "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-textLight transition",
-            isOpen && "rotate-180",
+            'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-textLight transition',
+            isOpen && 'rotate-180',
           )}
         >
           <Icon name="chevronDown" size="small" color="textLight" />
@@ -106,14 +106,14 @@ export default function DeveloperProfileMenu({
                     handleAction(action);
                   }}
                   className={cn(
-                    "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition hover:bg-base",
-                    action.destructive ? "text-danger" : "text-text",
+                    'flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition hover:bg-base',
+                    action.destructive ? 'text-danger' : 'text-text',
                   )}
                 >
                   <Icon
                     name={action.icon}
                     size="small"
-                    color={action.destructive ? "danger" : "textLight"}
+                    color={action.destructive ? 'danger' : 'textLight'}
                   />
                   <span>{action.label}</span>
                 </Link>
@@ -124,14 +124,14 @@ export default function DeveloperProfileMenu({
                   role="menuitem"
                   onClick={() => handleAction(action)}
                   className={cn(
-                    "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition hover:bg-base",
-                    action.destructive ? "text-danger" : "text-text",
+                    'flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition hover:bg-base',
+                    action.destructive ? 'text-danger' : 'text-text',
                   )}
                 >
                   <Icon
                     name={action.icon}
                     size="small"
-                    color={action.destructive ? "danger" : "textLight"}
+                    color={action.destructive ? 'danger' : 'textLight'}
                   />
                   <span>{action.label}</span>
                 </button>

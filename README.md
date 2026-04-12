@@ -1,7 +1,6 @@
 # 📚 School Management System (Frontend)
 
-A scalable and production-ready school management system built with Next.js (App Router).
-This application supports multiple user roles including students, school admins, and system admins.
+A scalable and production-ready school management system built with Next.js (App Router). This application supports multiple user roles including students, school admins, and system admins.
 
 ---
 

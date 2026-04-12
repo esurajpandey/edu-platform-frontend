@@ -1,9 +1,9 @@
-"use client";
-import { useEffect, useRef } from "react";
-import Link from "next/link";
-import { EduPlatformLogo, Icon } from "@/components";
-import { cn } from "@/lib/cn";
-import { SidebarProps } from "./layout.type";
+'use client';
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { EduPlatformLogo, Icon } from '@/components';
+import { cn } from '@/lib/cn';
+import { SidebarProps } from './layout.type';
 export default function DeveloperSidebar({
   menu,
   pathname,
@@ -30,7 +30,7 @@ export default function DeveloperSidebar({
     if (itemRect.top < navRect.top + padding || itemRect.bottom > navRect.bottom - padding) {
       nav.scrollTo({
         top: Math.max(itemTop - nav.clientHeight / 2 + item.clientHeight / 2, 0),
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     }
   }, [pathname]);
@@ -49,11 +49,11 @@ export default function DeveloperSidebar({
       <div className="relative mt-4 min-h-0 flex-1">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden h-8 lg:block"
-          style={{ background: "linear-gradient(to bottom, var(--color-surface), transparent)" }}
+          style={{ background: 'linear-gradient(to bottom, var(--color-surface), transparent)' }}
         />
         <div
           className="pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden h-8 lg:block"
-          style={{ background: "linear-gradient(to top, var(--color-surface), transparent)" }}
+          style={{ background: 'linear-gradient(to top, var(--color-surface), transparent)' }}
         />
         <nav
           ref={navRef}
@@ -70,23 +70,23 @@ export default function DeveloperSidebar({
                 onClick={onNavigate}
                 ref={isActive ? activeItemRef : null}
                 className={cn(
-                  "group flex items-center gap-2.5 rounded-xl border px-3 py-2.5 text-sm font-medium transition",
+                  'group flex items-center gap-2.5 rounded-xl border px-3 py-2.5 text-sm font-medium transition',
                   isActive
-                    ? "border-primary bg-primary text-surface shadow-[0_8px_16px_rgba(91,108,255,0.12)]"
-                    : "border-transparent text-textLight hover:border-surfaceSoft hover:bg-base hover:text-text",
+                    ? 'border-primary bg-primary text-surface shadow-[0_8px_16px_rgba(91,108,255,0.12)]'
+                    : 'border-transparent text-textLight hover:border-surfaceSoft hover:bg-base hover:text-text',
                 )}
               >
                 {item.icon ? (
                   <span
                     className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-xl transition",
-                      isActive ? "bg-surface/15" : "bg-surfaceSoft text-textLight",
+                      'flex h-8 w-8 items-center justify-center rounded-xl transition',
+                      isActive ? 'bg-surface/15' : 'bg-surfaceSoft text-textLight',
                     )}
                   >
                     <Icon
                       name={item.icon}
                       size="small"
-                      color={isActive ? "surface" : "textLight"}
+                      color={isActive ? 'surface' : 'textLight'}
                     />
                   </span>
                 ) : null}
