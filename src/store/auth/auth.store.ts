@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import axios from "axios";
-import { User, LoginPayload, UserResponse } from "@/services/auth/auth.type";
+import { User } from "@/types/user.type";
+import { LoginPayload, UserResponse } from "@/services/auth/auth.type";
 import { ErrorResponse } from "@/types/api.types";
-import { authService } from "@/services/auth/auth.service";
-
+import authServices from "./auth.services";
+import helper from "@/utils/helper";
 let accessTokenMemory: string | undefined;
 let bootstrapPromise: Promise<boolean> | null = null;
 
@@ -22,7 +23,7 @@ interface AuthState {
   bootstrapAuth: () => Promise<boolean>;
   fetchMe: () => Promise<UserResponse | ErrorResponse>;
   clearSession: () => void;
-  logout: () => Promise<void>;
+  logout: () => Promise<ErrorResponse | void>;
 }
 
 const initialData = {
@@ -37,53 +38,45 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   onLogin: async (credentials) => {
     try {
-      const response = await authService.login(credentials);
-      setAccessToken(response.data.accessToken);
+      const response = await authServices.login(credentials);
+      const result = helper.successResponse(response, "Login successful");
+      setAccessToken(result?.data?.accessToken ?? "");
       const profile = await get().fetchMe();
-
       if (!profile.success) {
         get().clearSession();
         return profile;
       }
-
       return profile;
     } catch (error) {
-      console.error("Login failed:", error);
       setAccessToken(undefined);
       set({ ...initialData });
-      return {
-        error: "LOGIN_FAILED",
-        success: false,
-        message: error instanceof Error ? error.message : "Login failed",
-      };
+      return helper.errorResponse(error);
     }
   },
 
   fetchMe: async () => {
     try {
-      const response = await authService.getMe();
+      const response = await authServices.fetchMe();
+      const result = helper.successResponse(response, "Profile fetched successfully");
       set({
-        user: response.data.user,
+        user: result?.data?.user,
         isAuthenticated: true,
         hasBootstrapped: true,
       });
-      return response;
+      return result;
     } catch (error) {
       console.error("Fetching profile failed:", error);
       setAccessToken(undefined);
       set({ ...initialData });
-      return {
-        error: "Failed to fetch user profile",
-        message: error instanceof Error ? error.message : "Unknown error",
-        success: false,
-      };
+      return helper.errorResponse(error, "Failed to fetch profile");
     }
   },
 
   onRefresh: async (options) => {
     try {
-      const response = await authService.refreshToken();
-      setAccessToken(response.data.accessToken);
+      const response = await authServices.refreshToken();
+      const result = helper.successResponse(response, "Token refreshed successfully");
+      setAccessToken(result?.data?.accessToken);
       set((state) => ({
         user: state.user,
         isAuthenticated: true,
@@ -91,9 +84,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
       }));
       return true;
     } catch (error) {
-      const isExpectedRefreshMiss =
-        axios.isAxiosError(error) &&
-        (error.response?.status === 400 || error.response?.status === 401);
+      const isExpectedRefreshMiss = axios.isAxiosError(error) && error.response?.status === 401;
 
       if (!options?.silent && !isExpectedRefreshMiss) {
         console.error("Token refresh failed:", error);
@@ -144,7 +135,9 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   logout: async () => {
     try {
-      await authService.logout();
+      await authServices.logout();
+    } catch (error) {
+      return helper.errorResponse(error, "Logout failed");
     } finally {
       get().clearSession();
     }
