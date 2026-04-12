@@ -1,4 +1,4 @@
-import { SVGProps } from "react";
+import { SVGProps } from 'react';
 
 export default function ExamsIcon(props: SVGProps<SVGSVGElement>) {
   return (

@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { ReactNode, useEffect, useId, useRef } from "react";
-import { createPortal } from "react-dom";
-import Icon from "@/components/Icon";
-import { cn } from "@/lib/cn";
-import { ModalSize } from "@/types";
-import Button from "./Button";
+import { ReactNode, useEffect, useId, useRef } from 'react';
+import { createPortal } from 'react-dom';
+import Icon from '@/components/Icon';
+import { cn } from '@/lib/cn';
+import { ModalSize } from '@/types';
+import Button from './Button';
 
 const modalSizeClasses: Record<ModalSize, string> = {
-  sm: "max-w-md",
-  md: "max-w-xl",
-  lg: "max-w-3xl",
-  xl: "max-w-5xl",
+  sm: 'max-w-md',
+  md: 'max-w-xl',
+  lg: 'max-w-3xl',
+  xl: 'max-w-5xl',
 };
 
 export type ModalProps = {
@@ -37,7 +37,7 @@ export default function Modal({
   description,
   children,
   footer,
-  size = "md",
+  size = 'md',
   closeOnBackdrop = true,
   closeOnEscape = true,
   hideCloseButton = false,
@@ -56,13 +56,13 @@ export default function Modal({
     }
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         onClose();
       }
     };
 
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
   }, [closeOnEscape, isOpen, onClose]);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function Modal({
     previousActiveElementRef.current = document.activeElement as HTMLElement | null;
 
     const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
 
     const panel = panelRef.current;
     if (panel) {
@@ -104,7 +104,7 @@ export default function Modal({
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Tab") {
+      if (event.key !== 'Tab') {
         return;
       }
 
@@ -112,7 +112,7 @@ export default function Modal({
         panel.querySelectorAll<HTMLElement>(
           'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
         ),
-      ).filter((element) => !element.hasAttribute("hidden"));
+      ).filter((element) => !element.hasAttribute('hidden'));
 
       if (focusableElements.length === 0) {
         event.preventDefault();
@@ -133,18 +133,18 @@ export default function Modal({
       }
     };
 
-    panel.addEventListener("keydown", handleKeyDown);
-    return () => panel.removeEventListener("keydown", handleKeyDown);
+    panel.addEventListener('keydown', handleKeyDown);
+    return () => panel.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
-  if (!isOpen || typeof document === "undefined") {
+  if (!isOpen || typeof document === 'undefined') {
     return null;
   }
 
   return createPortal(
     <div
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center bg-text/45 px-4 py-8 backdrop-blur-[2px]",
+        'fixed inset-0 z-50 flex items-center justify-center bg-text/45 px-4 py-8 backdrop-blur-[2px]',
         overlayClassName,
       )}
       onClick={closeOnBackdrop ? onClose : undefined}
@@ -158,7 +158,7 @@ export default function Modal({
         tabIndex={-1}
         ref={panelRef}
         className={cn(
-          "w-full max-h-[calc(100vh-4rem)] overflow-hidden rounded-[28px] border border-surfaceSoft bg-surface shadow-[0_24px_80px_rgba(31,41,55,0.18)]",
+          'w-full max-h-[calc(100vh-4rem)] overflow-hidden rounded-[28px] border border-surfaceSoft bg-surface shadow-[0_24px_80px_rgba(31,41,55,0.18)]',
           modalSizeClasses[size],
           panelClassName,
         )}
@@ -194,7 +194,7 @@ export default function Modal({
           </div>
         )}
 
-        <div className={cn("max-h-[calc(100vh-12rem)] overflow-y-auto px-6 py-6", bodyClassName)}>
+        <div className={cn('max-h-[calc(100vh-12rem)] overflow-y-auto px-6 py-6', bodyClassName)}>
           {children}
         </div>
 

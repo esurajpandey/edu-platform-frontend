@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Icon } from "@/components";
-import ProfileMenu from "./profileMenu";
-import { HeaderProps } from "./layout.type";
+import { Icon } from '@/components';
+import ProfileMenu from './profileMenu';
+import { HeaderProps } from './layout.type';
 
 export default function DeveloperHeader({
   activeItem,
@@ -19,18 +19,18 @@ export default function DeveloperHeader({
         <div className="flex min-w-0 flex-1 items-start justify-between gap-3">
           <div className="min-w-0 max-w-3xl">
             <h2 className="mt-1 text-xl font-semibold tracking-tight text-text">
-              {activeItem?.name ?? "Developer control center"}
+              {activeItem?.name ?? 'Developer control center'}
             </h2>
             <p className="mt-1 text-sm text-textLight">
               {activeItem?.description ??
-                "Monitor platform health, guide school operations, and keep the team moving."}
+                'Monitor platform health, guide school operations, and keep the team moving.'}
             </p>
           </div>
 
           <button
             type="button"
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-surfaceSoft bg-surface text-textLight transition hover:border-primary hover:text-primary lg:hidden"
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             onClick={onMenuToggle}
           >
             <span className="space-y-1">
@@ -44,17 +44,17 @@ export default function DeveloperHeader({
         <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center xl:ml-6 xl:w-auto xl:flex-nowrap xl:items-center xl:justify-end">
           <div className="flex items-center gap-2 rounded-[22px] border border-surfaceSoft bg-surface p-1.5 shadow-sm sm:contents sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none xl:flex-nowrap xl:justify-end">
             {utilityActions.map((action) =>
-              action.label === "Search" ? (
+              action.label === 'Search' ? (
                 <label
                   key={action.label}
                   className="hidden h-12 w-80 items-center gap-3 rounded-3xl border border-surfaceSoft bg-surface px-4 text-sm text-textLight transition focus-within:border-primary focus-within:ring-4 focus-within:ring-primaryLight xl:flex"
-                  style={{ boxShadow: "0 12px 30px rgba(15, 23, 42, 0.06)" }}
+                  style={{ boxShadow: '0 12px 30px rgba(15, 23, 42, 0.06)' }}
                 >
                   <Icon name={action.icon} size="small" color="textLight" />
                   <input
                     type="text"
                     placeholder="Search"
-                    style={{ width: "100%", outline: "none", fontSize: "1rem" }}
+                    style={{ width: '100%', outline: 'none', fontSize: '1rem' }}
                   />
                 </label>
               ) : (

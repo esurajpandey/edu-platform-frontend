@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { ReactNode } from 'react';
+import { cn } from '@/lib/cn';
 
 type FieldShellProps = {
   label?: ReactNode;
@@ -25,7 +25,7 @@ export default function FieldShell({
   className,
 }: FieldShellProps) {
   return (
-    <div className={cn("space-y-1.5", className)}>
+    <div className={cn('space-y-1.5', className)}>
       {label ? (
         <label
           htmlFor={labelFor}

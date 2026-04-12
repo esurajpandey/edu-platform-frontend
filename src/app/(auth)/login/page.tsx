@@ -1,33 +1,33 @@
-"use client";
-import { useState } from "react";
-import { Button, Checkbox, EduPlatformLogo, Icon, InputBox } from "@/components";
-import { useAuthStore } from "@/store/auth/auth.store";
-import { useRouter } from "next/navigation";
-import { getHomeRouteForSystemRole } from "@/lib/auth-redirect";
-import appToast from "@/lib/toast";
+'use client';
+import { useState } from 'react';
+import { Button, Checkbox, EduPlatformLogo, Icon, InputBox } from '@/components';
+import { useAuthStore } from '@/store/auth/auth.store';
+import { useRouter } from 'next/navigation';
+import { getHomeRouteForSystemRole } from '@/lib/auth-redirect';
+import appToast from '@/lib/toast';
 const highlights = [
-  "Centralized school operations and access management",
-  "Role-based workflows for admin, teachers, and students",
-  "Messaging, attendance, and fee reminders in one system",
+  'Centralized school operations and access management',
+  'Role-based workflows for admin, teachers, and students',
+  'Messaging, attendance, and fee reminders in one system',
 ];
 
 export default function LoginPage() {
   const { onLogin } = useAuthStore();
   const router = useRouter();
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError("");
+    setError('');
     const payload = { loginId: userId, password };
     const result = await onLogin(payload);
     if (!result.success) {
-      appToast.error(result.message || "Unable to sign in. Please try again.");
+      appToast.error(result.message || 'Unable to sign in. Please try again.');
       return;
     }
-    if (result.success && "data" in result) {
+    if (result.success && 'data' in result) {
       router.push(getHomeRouteForSystemRole(result.data.user.systemRole));
       return;
     }
@@ -135,7 +135,7 @@ export default function LoginPage() {
                   variant="filled"
                   value={userId}
                   onChange={(event) => setUserId(event.target.value)}
-                  error={error ? " " : undefined}
+                  error={error ? ' ' : undefined}
                 />
 
                 <div>

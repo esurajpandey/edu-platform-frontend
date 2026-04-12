@@ -1,1 +1,1 @@
-export { setupApiInterceptors } from "./auth.interceptor";
+export { setupApiInterceptors } from './auth.interceptor';

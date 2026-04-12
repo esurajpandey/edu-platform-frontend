@@ -1,5 +1,5 @@
-import { ClipLoader } from "react-spinners";
-import { cn } from "@/lib/cn";
+import { ClipLoader } from 'react-spinners';
+import { cn } from '@/lib/cn';
 
 type LoaderProps = {
   size?: number;
@@ -11,16 +11,16 @@ type LoaderProps = {
 
 export default function Loader({
   size = 28,
-  color = "var(--color-primary)",
-  label = "Loading...",
+  color = 'var(--color-primary)',
+  label = 'Loading...',
   fullScreen = false,
   className,
 }: LoaderProps) {
   return (
     <div
       className={cn(
-        "flex items-center justify-center",
-        fullScreen ? "h-screen w-full" : "min-h-16 w-full",
+        'flex items-center justify-center',
+        fullScreen ? 'h-screen w-full' : 'min-h-16 w-full',
         className,
       )}
     >

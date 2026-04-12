@@ -1,6 +1,6 @@
-import { AxiosInstance, InternalAxiosRequestConfig } from "axios";
-import { getAccessToken, useAuthStore } from "@/store/auth/auth.store";
-import { APP_ROUTES } from "@/constants/app-routes";
+import { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import { getAccessToken, useAuthStore } from '@/store/auth/auth.store';
+import { APP_ROUTES } from '@/constants/app-routes';
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
@@ -11,7 +11,7 @@ const isAuthRoute = (url?: string) => {
     return false;
   }
   return (
-    url.includes("/auth/login") || url.includes("/auth/refresh") || url.includes("/auth/logout")
+    url.includes('/auth/login') || url.includes('/auth/refresh') || url.includes('/auth/logout')
   );
 };
 
@@ -55,7 +55,7 @@ export const setupApiInterceptors = (client: AxiosInstance): void => {
         } catch (refreshError) {
           refreshPromise = null;
           useAuthStore.getState().clearSession();
-          if (typeof window !== "undefined") {
+          if (typeof window !== 'undefined') {
             window.location.replace(APP_ROUTES.login);
           }
           return Promise.reject(refreshError);

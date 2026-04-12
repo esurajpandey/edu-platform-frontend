@@ -1,10 +1,10 @@
 export enum Status {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
 }
 export enum SystemRole {
-  USER = "USER",
-  DEVELOPER = "DEVELOPER",
+  USER = 'USER',
+  DEVELOPER = 'DEVELOPER',
 }
 export interface User {
   userId: string;

@@ -1,5 +1,5 @@
-import { User } from "@/types/user.type";
-import { SuccessResponse } from "@/types/api.types";
+import { User } from '@/types/user.type';
+import { SuccessResponse } from '@/types/api.types';
 export interface LoginPayload {
   loginId: string;
   password: string;

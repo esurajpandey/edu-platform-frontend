@@ -1,7 +1,7 @@
-import { APP_ROUTES } from "@/constants/app-routes";
+import { APP_ROUTES } from '@/constants/app-routes';
 
 export function getHomeRouteForSystemRole(systemRole?: string | null) {
-  if (systemRole?.toUpperCase() === "DEVELOPER") {
+  if (systemRole?.toUpperCase() === 'DEVELOPER') {
     return APP_ROUTES.developer.dashboard;
   }
 
@@ -10,8 +10,8 @@ export function getHomeRouteForSystemRole(systemRole?: string | null) {
 
 export function isProtectedAppPath(pathname: string) {
   return (
-    pathname.startsWith("/dashboard") ||
-    pathname.startsWith("/school") ||
-    pathname.startsWith("/developer")
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/school') ||
+    pathname.startsWith('/developer')
   );
 }

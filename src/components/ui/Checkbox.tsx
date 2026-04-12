@@ -1,7 +1,7 @@
-import { forwardRef, InputHTMLAttributes, ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { forwardRef, InputHTMLAttributes, ReactNode } from 'react';
+import { cn } from '@/lib/cn';
 
-export type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> & {
+export type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> & {
   label?: ReactNode;
   description?: ReactNode;
   containerClassName?: string;
@@ -15,9 +15,9 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
     <label
       htmlFor={id}
       className={cn(
-        "flex w-full items-start gap-3 rounded-2xl border border-surfaceSoft bg-base px-4 py-3 transition duration-200",
-        !disabled && "cursor-pointer hover:border-primary/20",
-        disabled && "cursor-not-allowed opacity-65",
+        'flex w-full items-start gap-3 rounded-2xl border border-surfaceSoft bg-base px-4 py-3 transition duration-200',
+        !disabled && 'cursor-pointer hover:border-primary/20',
+        disabled && 'cursor-not-allowed opacity-65',
         containerClassName,
       )}
     >
@@ -28,7 +28,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
           type="checkbox"
           disabled={disabled}
           className={cn(
-            "peer h-5 w-5 appearance-none rounded-md border border-surfaceSoft bg-surface outline-none transition duration-200 checked:border-primary checked:bg-primary focus-visible:ring-2 focus-visible:ring-primary/10 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent disabled:cursor-not-allowed",
+            'peer h-5 w-5 appearance-none rounded-md border border-surfaceSoft bg-surface outline-none transition duration-200 checked:border-primary checked:bg-primary focus-visible:ring-2 focus-visible:ring-primary/10 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent disabled:cursor-not-allowed',
             className,
           )}
           {...props}

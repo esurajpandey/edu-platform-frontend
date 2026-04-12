@@ -1,8 +1,8 @@
-import { ErrorResponse, SuccessResponse } from "@/types/api.types";
-import axios, { AxiosResponse } from "axios";
+import { ErrorResponse, SuccessResponse } from '@/types/api.types';
+import axios, { AxiosResponse } from 'axios';
 export const errorResponse = (
   error: unknown,
-  defaultMessage: string = "Something went wrong",
+  defaultMessage: string = 'Something went wrong',
   defaultStatusCode: number = 400,
 ) => {
   let message = defaultMessage;
@@ -30,7 +30,7 @@ type ApiSuccessData<T> = {
 
 export const successResponse = <T>(
   response: AxiosResponse<ApiSuccessData<T>>,
-  defaultMessage: string = "Success",
+  defaultMessage: string = 'Success',
 ): SuccessResponse<T> => {
   return {
     message: response.data?.message ?? defaultMessage,
