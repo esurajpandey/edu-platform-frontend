@@ -4,7 +4,7 @@ import { Button, Checkbox, EduPlatformLogo, Icon, InputBox } from "@/components"
 import { useAuthStore } from "@/store/auth/auth.store";
 import { useRouter } from "next/navigation";
 import { getHomeRouteForSystemRole } from "@/lib/auth-redirect";
-
+import appToast from "@/lib/toast";
 const highlights = [
   "Centralized school operations and access management",
   "Role-based workflows for admin, teachers, and students",
@@ -23,12 +23,14 @@ export default function LoginPage() {
     setError("");
     const payload = { loginId: userId, password };
     const result = await onLogin(payload);
+    if (!result.success) {
+      appToast.error(result.message || "Unable to sign in. Please try again.");
+      return;
+    }
     if (result.success && "data" in result) {
       router.push(getHomeRouteForSystemRole(result.data.user.systemRole));
       return;
     }
-
-    setError(result.message || "Unable to sign in. Please try again.");
   };
   return (
     <main className="min-h-screen bg-base px-3 py-3 text-text sm:px-6 lg:h-screen lg:overflow-hidden lg:px-8 lg:py-6">

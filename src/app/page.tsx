@@ -1,5 +1,7 @@
 "use client";
 
+import { Loader } from "@/components";
+
 export default function MainPage() {
-  return <div className="flex h-screen items-center justify-center">...Loading</div>;
+  return <Loader fullScreen label="Redirecting..." />;
 }
