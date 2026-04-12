@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Providers from "@/lib/providers";
-
+import ToastProvider from "@/components/providers/ToastProvider";
 export const metadata: Metadata = {
   title: "Edu Platform",
   description: "School Management System",
@@ -13,7 +13,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <ToastProvider />
+            {children}
+          </AuthProvider>
         </Providers>
       </body>
     </html>
