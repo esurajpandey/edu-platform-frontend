@@ -8,6 +8,10 @@ const authService = {
   fetchMe: async () => await apiClient.get<FetchUserResponse | ErrorResponse>('/auth/me'),
   refreshToken: async () =>
     await apiClient.post<RefreshTokenResponse | ErrorResponse>('/auth/refresh', {}),
+  validateSetPasswordToken: async (token: string) =>
+    await apiClient.post(`/auth/setup-password/validate`, { token }),
+  setPassword: async (token: string, password: string) =>
+    await apiClient.post('/auth/setup-password', { token, password }),
 };
 
 export default authService;

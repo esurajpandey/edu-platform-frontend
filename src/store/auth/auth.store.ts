@@ -25,6 +25,8 @@ interface AuthState {
   fetchMe: () => Promise<FetchUserResponse | ErrorResponse>;
   clearSession: () => void;
   logout: () => Promise<ErrorResponse | void>;
+  validateSetPasswordToken: (token: string) => Promise<FetchUserResponse | ErrorResponse>;
+  setUserPassword: (token: string, password: string) => Promise<FetchUserResponse | ErrorResponse>;
 }
 
 const initialData = {
@@ -138,6 +140,22 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
       return helper.errorResponse(error, 'Logout failed');
     } finally {
       get().clearSession();
+    }
+  },
+  validateSetPasswordToken: async (token: string) => {
+    try {
+      const response = await authService.validateSetPasswordToken(token);
+      return helper.successResponse(response, 'Token is valid');
+    } catch (error) {
+      return helper.errorResponse(error, 'Invalid or expired token');
+    }
+  },
+  setUserPassword: async (token: string, password: string) => {
+    try {
+      const response = await authService.setPassword(token, password);
+      return helper.successResponse(response, 'Password set successfully');
+    } catch (error) {
+      return helper.errorResponse(error, 'Failed to set password');
     }
   },
 }));
