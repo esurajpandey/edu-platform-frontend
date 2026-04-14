@@ -1,4 +1,5 @@
 export { default as Button } from './Button';
+export { default as Grid } from './Grid';
 export { default as Checkbox } from './Checkbox';
 export { default as DatePicker } from './DatePicker';
 export { default as InputBox } from './InputBox';

@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  CSSProperties,
   ChangeEvent,
   FocusEventHandler,
   InputHTMLAttributes,
@@ -12,6 +13,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { format, isValid, parseISO } from 'date-fns';
 import {
   DayFlag,
@@ -129,9 +131,12 @@ export type DatePickerProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'
   variant?: InputVariant;
   tone?: InputTone;
   className?: string;
+  rootClassName?: string;
   inputClassName?: string;
   popoverClassName?: string;
   calendarClassName?: string;
+  portal?: boolean;
+  popoverPlacement?: 'bottom-start' | 'bottom-end';
   disabledDates?: Matcher | Matcher[];
   numberOfMonths?: 1 | 2;
   showOutsideDays?: boolean;
@@ -158,9 +163,12 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function DatePi
     variant = 'default',
     tone = error ? 'danger' : 'default',
     className,
+    rootClassName,
     inputClassName,
     popoverClassName,
     calendarClassName,
+    portal = false,
+    popoverPlacement = 'bottom-start',
     disabledDates,
     numberOfMonths = 1,
     showOutsideDays = true,
@@ -190,6 +198,7 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function DatePi
     typeof defaultValue === 'string' ? defaultValue : '',
   );
   const [isOpen, setIsOpen] = useState(false);
+  const [popoverStyle, setPopoverStyle] = useState<CSSProperties>();
 
   const currentValue = isControlled ? (typeof value === 'string' ? value : '') : internalValue;
   const selectedDate = parseDateValue(currentValue);
@@ -217,6 +226,40 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function DatePi
     document.addEventListener('mousedown', handlePointerDown);
     return () => document.removeEventListener('mousedown', handlePointerDown);
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!portal || !isOpen) {
+      return;
+    }
+
+    const updatePopoverPosition = () => {
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (!rect) {
+        return;
+      }
+
+      setPopoverStyle({
+        position: 'fixed',
+        top: rect.bottom + 8,
+        left: popoverPlacement === 'bottom-end' ? undefined : rect.left,
+        right:
+          popoverPlacement === 'bottom-end'
+            ? Math.max(window.innerWidth - rect.right, 12)
+            : undefined,
+        width: Math.min(rect.width, 352),
+        zIndex: 60,
+      });
+    };
+
+    updatePopoverPosition();
+    window.addEventListener('resize', updatePopoverPosition);
+    window.addEventListener('scroll', updatePopoverPosition, true);
+
+    return () => {
+      window.removeEventListener('resize', updatePopoverPosition);
+      window.removeEventListener('scroll', updatePopoverPosition, true);
+    };
+  }, [isOpen, popoverPlacement, portal]);
 
   const dayPickerDisabled = useMemo(() => {
     const matchers: Matcher[] = [];
@@ -326,6 +369,7 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function DatePi
             dateVariantClasses[variant],
             dateToneClasses[tone],
             disabled && 'cursor-not-allowed bg-surfaceSoft/60 opacity-60',
+            rootClassName,
           )}
         >
           <div className="flex shrink-0 items-center text-textLight">
@@ -382,36 +426,51 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function DatePi
           {...(maxValue ? { max: maxValue } : {})}
         />
 
-        {isOpen ? (
-          <div
-            id={calendarId}
-            role="dialog"
-            aria-label={label ?? 'Date picker'}
-            className={cn(
-              'absolute left-0 top-[calc(100%+0.65rem)] z-30 w-[min(100%,22rem)] rounded-[24px] border border-surfaceSoft bg-surface p-4 shadow-xl',
-              numberOfMonths === 2 && 'w-[min(100vw-2rem,44rem)]',
-              popoverClassName,
-            )}
-          >
-            <DayPicker
-              mode="single"
-              month={selectedDate ?? visibleMonth}
-              onMonthChange={setVisibleMonth}
-              selected={selectedDate}
-              onSelect={handleSelect}
-              disabled={dayPickerDisabled}
-              startMonth={startMonth ?? minDate}
-              endMonth={endMonth ?? maxDate}
-              numberOfMonths={numberOfMonths}
-              showOutsideDays={showOutsideDays}
-              fixedWeeks
-              navLayout="after"
-              className={cn('text-text', calendarClassName)}
-              classNames={dayPickerClassNames}
-              components={{ Chevron: CalendarChevron }}
-            />
-          </div>
-        ) : null}
+        {isOpen
+          ? (() => {
+              const popoverNode = (
+                <div
+                  id={calendarId}
+                  role="dialog"
+                  aria-label={label ?? 'Date picker'}
+                  style={portal ? popoverStyle : undefined}
+                  className={cn(
+                    portal
+                      ? 'fixed z-[60] w-[min(22rem,calc(100vw-1.5rem))]'
+                      : 'absolute left-0 top-[calc(100%+0.65rem)] z-30 w-[min(100%,22rem)]',
+                    'rounded-[24px] border border-surfaceSoft bg-surface p-4 shadow-xl',
+                    numberOfMonths === 2 &&
+                      (portal ? 'w-[min(44rem,calc(100vw-1.5rem))]' : 'w-[min(100vw-2rem,44rem)]'),
+                    popoverClassName,
+                  )}
+                >
+                  <DayPicker
+                    mode="single"
+                    month={selectedDate ?? visibleMonth}
+                    onMonthChange={setVisibleMonth}
+                    selected={selectedDate}
+                    onSelect={handleSelect}
+                    disabled={dayPickerDisabled}
+                    startMonth={startMonth ?? minDate}
+                    endMonth={endMonth ?? maxDate}
+                    numberOfMonths={numberOfMonths}
+                    showOutsideDays={showOutsideDays}
+                    fixedWeeks
+                    navLayout="after"
+                    className={cn('text-text', calendarClassName)}
+                    classNames={dayPickerClassNames}
+                    components={{ Chevron: CalendarChevron }}
+                  />
+                </div>
+              );
+
+              if (portal && typeof document !== 'undefined') {
+                return createPortal(popoverNode, document.body);
+              }
+
+              return popoverNode;
+            })()
+          : null}
       </div>
     </FieldShell>
   );
