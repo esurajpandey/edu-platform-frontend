@@ -1,6 +1,6 @@
 export { default as Button } from './Button';
 export { default as Checkbox } from './Checkbox';
-export { default as DatePicker } from './DatePicker';
+export { default as DateInput } from './DateInput';
 export { default as InputBox } from './InputBox';
 export { default as Loader } from './Loader';
 export { default as Modal } from './Modal';
