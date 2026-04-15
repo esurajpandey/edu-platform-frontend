@@ -1,6 +1,6 @@
 import { cn } from '@/lib/cn';
 import type { GridColumn } from './grid.type';
-import { getAlignmentClassName } from './utils';
+import { getAlignmentClassName, resolveGridAlignment } from './utils';
 
 type GridHeaderProps<T> = {
   columns: GridColumn<T>[];
@@ -26,7 +26,7 @@ export default function GridHeader<T>({
           key={String(column.field)}
           className={cn(
             'flex min-h-14 items-center border-r border-surfaceSoft px-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/85 last:border-r-0',
-            getAlignmentClassName(column.align, true),
+            getAlignmentClassName(resolveGridAlignment(column.align, column.type), true),
           )}
         >
           <span>{column.name}</span>

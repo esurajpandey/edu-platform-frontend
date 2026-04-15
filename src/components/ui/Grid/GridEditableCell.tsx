@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 import DatePicker from '../DatePicker';
 import InputBox from '../InputBox';
 import type { GridColumn } from './grid.type';
-import { getAlignmentClassName } from './utils';
+import { getAlignmentClassName, resolveGridAlignment } from './utils';
 
 type GridEditableCellProps<T extends Record<string, unknown>> = {
   column: GridColumn<T>;
@@ -25,6 +25,8 @@ export default function GridEditableCell<T extends Record<string, unknown>>({
   value,
   onChange,
 }: GridEditableCellProps<T>) {
+  const alignment = resolveGridAlignment(column.align, column.type);
+
   const emitValueChange = (nextValue: unknown) => {
     if (!onChange) {
       return;
@@ -48,6 +50,9 @@ export default function GridEditableCell<T extends Record<string, unknown>>({
           onChange={(option) => emitValueChange(option?.value ?? '')}
           placeholder="Select option"
           isSearchable={false}
+          maxMenuHeight={104}
+          menuPlacement="auto"
+          menuShouldScrollIntoView={false}
           menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
           menuPosition="fixed"
           className="w-full"
@@ -55,11 +60,13 @@ export default function GridEditableCell<T extends Record<string, unknown>>({
             control: () =>
               cn(
                 'flex min-h-14 w-full items-center border-0 bg-transparent px-4 text-sm font-medium text-text outline-none',
-                getAlignmentClassName(column.align),
+                getAlignmentClassName(alignment),
               ),
             valueContainer: () => 'p-0 gap-0',
-            singleValue: () => 'm-0 text-sm font-medium text-text',
-            placeholder: () => 'm-0 text-sm text-textMuted',
+            singleValue: () =>
+              cn('m-0 w-full text-sm font-medium text-text', getAlignmentClassName(alignment)),
+            placeholder: () =>
+              cn('m-0 w-full text-sm text-textMuted', getAlignmentClassName(alignment)),
             indicatorsContainer: () => 'gap-0',
             indicatorSeparator: () => 'hidden',
             dropdownIndicator: () => 'px-0 text-textMuted',
@@ -73,6 +80,10 @@ export default function GridEditableCell<T extends Record<string, unknown>>({
                 !isSelected && isFocused && 'bg-primary/8 text-text',
                 !isSelected && !isFocused && 'text-text',
               ),
+          }}
+          styles={{
+            menuPortal: (base) => ({ ...base, zIndex: 70 }),
+            menu: (base) => ({ ...base, marginTop: 4, marginBottom: 4 }),
           }}
           components={{
             DropdownIndicator: () => <Icon name="chevronDown" size="small" color="textLight" />,
@@ -91,9 +102,9 @@ export default function GridEditableCell<T extends Record<string, unknown>>({
         className="w-full"
         portal
         popoverPlacement="bottom-start"
-        inputClassName={cn('text-sm font-medium text-text', getAlignmentClassName(column.align))}
+        inputClassName={cn('text-sm font-medium text-text', getAlignmentClassName(alignment))}
         rootClassName={cn('px-4', sharedControlClassName)}
-        popoverClassName="rounded-2xl border border-surfaceSoft bg-surface p-4 shadow-[0_18px_40px_rgba(15,23,42,0.12)]"
+        popoverClassName="h-[15rem] w-[15rem] rounded-[20px] border border-surfaceSoft bg-surface p-2.5 shadow-[0_14px_28px_rgba(15,23,42,0.1)]"
       />
     );
   }
@@ -116,7 +127,10 @@ export default function GridEditableCell<T extends Record<string, unknown>>({
       size="md"
       radius="md"
       rootClassName={cn('px-4', sharedControlClassName)}
-      inputClassName={cn('text-sm font-medium text-text', getAlignmentClassName(column.align))}
+      inputClassName={cn(
+        'text-sm font-medium text-text [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
+        getAlignmentClassName(alignment),
+      )}
     />
   );
 }

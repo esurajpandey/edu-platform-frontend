@@ -1,6 +1,6 @@
 import type { GridColumn } from './grid.type';
 import GridEditableCell from './GridEditableCell';
-import { formatCellValue, getAlignmentClassName } from './utils';
+import { formatCellValue, getAlignmentClassName, resolveGridAlignment } from './utils';
 
 type GridCellProps<T extends Record<string, unknown>> = {
   column: GridColumn<T>;
@@ -31,7 +31,7 @@ export default function GridCell<T extends Record<string, unknown>>({
 
   return (
     <div
-      className={`flex min-h-14 items-center border-r border-surfaceSoft px-4 text-sm font-medium text-text last:border-r-0 ${getAlignmentClassName(column.align)}`}
+      className={`flex min-h-14 items-center border-r border-surfaceSoft px-4 text-sm font-medium text-text last:border-r-0 ${getAlignmentClassName(resolveGridAlignment(column.align, column.type))}`}
     >
       {column.render ? column.render(value, row) : formatCellValue(value, column.type)}
     </div>

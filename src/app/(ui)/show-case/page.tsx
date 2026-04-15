@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import Grid from '@/components/ui/Grid';
 
@@ -10,7 +9,7 @@ type TeamRow = {
   joinedOn: string;
 };
 const dataset: TeamRow[] = [];
-for (let i = 0; i < 1000; i++) {
+for (let i = 0; i < 100; i++) {
   dataset.push({
     name: `Suraj Kumar ${i}`,
     age: 26 + i,

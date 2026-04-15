@@ -1,6 +1,22 @@
 import { format, isValid, parseISO } from 'date-fns';
 import type { GridColumnType } from './grid.type';
 
+export function resolveGridAlignment(align?: 'left' | 'center' | 'right', type?: GridColumnType) {
+  if (align) {
+    return align;
+  }
+
+  if (type === 'number') {
+    return 'right';
+  }
+
+  if (type === 'select' || type === 'date') {
+    return 'center';
+  }
+
+  return 'left';
+}
+
 export function getAlignmentClassName(align: 'left' | 'center' | 'right' = 'left', header = false) {
   if (align === 'center') {
     return header ? 'justify-center text-center' : 'justify-center text-center';

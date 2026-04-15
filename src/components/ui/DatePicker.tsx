@@ -44,27 +44,31 @@ const dateToneClasses: Record<InputTone, string> = {
 const calendarToggleButtonClassName =
   'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition focus-visible:outline-none disabled:cursor-not-allowed';
 
+const PORTAL_CALENDAR_SIZE = 240;
+const PORTAL_GAP = 8;
+const VIEWPORT_PADDING = 12;
+
 const dayPickerClassNames = {
   [UI.Root]: 'w-full',
   [UI.Months]: 'w-full',
-  [UI.Month]: 'w-full space-y-4',
+  [UI.Month]: 'w-full space-y-2',
   [UI.MonthCaption]: 'relative flex items-center justify-between gap-3',
-  [UI.CaptionLabel]: 'text-sm font-semibold tracking-tight text-text',
+  [UI.CaptionLabel]: 'text-[13px] font-semibold tracking-tight text-text',
   [UI.Nav]: 'flex items-center gap-2',
   [UI.PreviousMonthButton]:
-    'inline-flex h-9 w-9 items-center justify-center rounded-xl border border-surfaceSoft bg-surface text-text transition hover:border-primary/20 hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-40',
+    'inline-flex h-7 w-7 items-center justify-center rounded-lg border border-surfaceSoft bg-surface text-text transition hover:border-primary/20 hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-40',
   [UI.NextMonthButton]:
-    'inline-flex h-9 w-9 items-center justify-center rounded-xl border border-surfaceSoft bg-surface text-text transition hover:border-primary/20 hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-40',
-  [UI.Chevron]: 'h-4 w-4',
+    'inline-flex h-7 w-7 items-center justify-center rounded-lg border border-surfaceSoft bg-surface text-text transition hover:border-primary/20 hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-40',
+  [UI.Chevron]: 'h-3.5 w-3.5',
   [UI.MonthGrid]: 'w-full border-collapse',
-  [UI.Weekdays]: 'grid grid-cols-7 gap-1 mb-2',
+  [UI.Weekdays]: 'mb-0.5 grid grid-cols-7 gap-0.5',
   [UI.Weekday]:
-    'flex h-9 items-center justify-center text-[11px] font-semibold uppercase tracking-[0.12em] text-textMuted',
-  [UI.Weeks]: 'space-y-1',
-  [UI.Week]: 'grid grid-cols-7 gap-1',
+    'flex h-6 items-center justify-center text-[9px] font-semibold uppercase tracking-[0.1em] text-textMuted',
+  [UI.Weeks]: 'space-y-0.5',
+  [UI.Week]: 'grid grid-cols-7 gap-0.5',
   [UI.Day]: 'flex items-center justify-center',
   [UI.DayButton]:
-    'flex h-10 w-10 items-center justify-center rounded-xl text-sm font-medium text-text transition outline-none hover:bg-primary/8 focus-visible:ring-2 focus-visible:ring-primary/10',
+    'flex h-7 w-7 items-center justify-center rounded-md text-[13px] font-medium text-text transition outline-none hover:bg-primary/8 focus-visible:ring-2 focus-visible:ring-primary/10',
   [SelectionState.selected]: 'bg-primary text-surface hover:bg-primaryDark',
   [DayFlag.today]: 'border border-primary/20 text-primary',
   [DayFlag.outside]: 'text-textMuted opacity-45',
@@ -238,15 +242,30 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function DatePi
         return;
       }
 
+      const availableBelow = window.innerHeight - rect.bottom - VIEWPORT_PADDING;
+      const availableAbove = rect.top - VIEWPORT_PADDING;
+      const shouldOpenAbove =
+        availableBelow < PORTAL_CALENDAR_SIZE && availableAbove > availableBelow;
+
+      const top = shouldOpenAbove
+        ? Math.max(VIEWPORT_PADDING, rect.top - PORTAL_CALENDAR_SIZE - PORTAL_GAP)
+        : Math.min(
+            rect.bottom + PORTAL_GAP,
+            window.innerHeight - PORTAL_CALENDAR_SIZE - VIEWPORT_PADDING,
+          );
+
       setPopoverStyle({
         position: 'fixed',
-        top: rect.bottom + 8,
-        left: popoverPlacement === 'bottom-end' ? undefined : rect.left,
+        top,
+        left:
+          popoverPlacement === 'bottom-end'
+            ? undefined
+            : Math.min(rect.left, window.innerWidth - PORTAL_CALENDAR_SIZE - 12),
         right:
           popoverPlacement === 'bottom-end'
             ? Math.max(window.innerWidth - rect.right, 12)
             : undefined,
-        width: Math.min(rect.width, 352),
+        width: PORTAL_CALENDAR_SIZE,
         zIndex: 60,
       });
     };
@@ -436,9 +455,9 @@ const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function DatePi
                   style={portal ? popoverStyle : undefined}
                   className={cn(
                     portal
-                      ? 'fixed z-[60] w-[min(22rem,calc(100vw-1.5rem))]'
-                      : 'absolute left-0 top-[calc(100%+0.65rem)] z-30 w-[min(100%,22rem)]',
-                    'rounded-[24px] border border-surfaceSoft bg-surface p-4 shadow-xl',
+                      ? 'fixed z-[60] w-[15rem]'
+                      : 'absolute left-0 top-[calc(100%+0.65rem)] z-30 w-[15rem]',
+                    'rounded-[20px] border border-surfaceSoft bg-surface p-2.5 shadow-[0_14px_28px_rgba(15,23,42,0.1)]',
                     numberOfMonths === 2 &&
                       (portal ? 'w-[min(44rem,calc(100vw-1.5rem))]' : 'w-[min(100vw-2rem,44rem)]'),
                     popoverClassName,
