@@ -178,7 +178,6 @@ export default function Modal({
                 </p>
               ) : null}
             </div>
-
             {!hideCloseButton ? (
               <Button
                 aria-label="Close modal"
