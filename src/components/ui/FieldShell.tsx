@@ -25,7 +25,7 @@ export default function FieldShell({
   className,
 }: FieldShellProps) {
   return (
-    <div className={cn('space-y-1.5', className)}>
+    <div className={cn('space-y-1.5 input-box', className)}>
       {label ? (
         <label
           htmlFor={labelFor}

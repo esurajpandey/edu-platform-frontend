@@ -162,8 +162,8 @@ export default function SetPassword() {
             <Button
               tone="primary"
               type="button"
-              fullWidth
-              size="lg"
+              reaponsive
+              size="large"
               disabled={isDisabled}
               isLoading={loading}
               label="Set Password"

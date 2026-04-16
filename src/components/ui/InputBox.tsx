@@ -1,8 +1,11 @@
-import { forwardRef, InputHTMLAttributes, ReactNode } from 'react';
+'use client';
+
+import React, { forwardRef, InputHTMLAttributes, ReactNode, useId } from 'react';
 import { cn } from '@/lib/cn';
-import { ControlRadius, ControlSize, InputTone, InputVariant } from '@/types';
+import { ControlRadius, InputTone, InputVariant } from '@/types';
 import FieldShell from './FieldShell';
-import { controlRadiusClasses, controlSizeClasses } from './styles';
+import { controlRadiusClasses, sizeClasses } from './styles';
+import { ComponentSize } from '@/types/ui.types';
 
 const inputVariantClasses: Record<InputVariant, string> = {
   default: 'border border-surfaceSoft bg-surface',
@@ -22,7 +25,7 @@ export type InputBoxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> 
   label?: ReactNode;
   description?: ReactNode;
   error?: ReactNode;
-  size?: ControlSize;
+  size?: ComponentSize;
   radius?: ControlRadius;
   variant?: InputVariant;
   tone?: InputTone;
@@ -41,10 +44,10 @@ const InputBox = forwardRef<HTMLInputElement, InputBoxProps>(function InputBox(
     required,
     className,
     inputClassName,
-    size = 'md',
-    radius = 'lg',
+    size = 'medium',
+    radius = 'md',
     variant = 'default',
-    tone = error ? 'danger' : 'default',
+    tone,
     leftSlot,
     rightSlot,
     rootClassName,
@@ -54,15 +57,22 @@ const InputBox = forwardRef<HTMLInputElement, InputBoxProps>(function InputBox(
   },
   ref,
 ) {
-  const descriptionId = description && id ? `${id}-description` : undefined;
-  const errorId = error && id ? `${id}-error` : undefined;
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
+
+  const descriptionId = description ? `${inputId}-description` : undefined;
+  const errorId = error ? `${inputId}-error` : undefined;
+
   const describedBy =
-    [ariaDescribedBy, errorId ?? descriptionId].filter(Boolean).join(' ') || undefined;
+    [ariaDescribedBy, error ? errorId : descriptionId].filter(Boolean).join(' ') || undefined;
+
+  // ✅ Error takes priority over tone
+  const resolvedTone: InputTone = error ? 'danger' : (tone ?? 'default');
 
   return (
     <FieldShell
       label={label}
-      labelFor={id}
+      labelFor={inputId}
       description={description}
       error={error}
       descriptionId={descriptionId}
@@ -72,21 +82,20 @@ const InputBox = forwardRef<HTMLInputElement, InputBoxProps>(function InputBox(
     >
       <div
         className={cn(
-          'flex w-full items-center gap-3 overflow-hidden transition duration-200 focus-within:ring-2 focus-within:ring-offset-0 disabled:opacity-60',
-          controlSizeClasses[size],
+          'flex w-full items-center gap-3 overflow-hidden transition duration-200 focus-within:ring-2 focus-within:ring-offset-0',
+          sizeClasses[size],
           controlRadiusClasses[radius],
           inputVariantClasses[variant],
-          inputToneClasses[tone],
+          inputToneClasses[resolvedTone],
           disabled && 'cursor-not-allowed bg-surfaceSoft/60',
           rootClassName,
         )}
       >
-        {leftSlot ? (
-          <div className="flex shrink-0 items-center text-textLight">{leftSlot}</div>
-        ) : null}
+        {leftSlot && <div className="flex shrink-0 items-center text-textLight">{leftSlot}</div>}
+
         <input
           ref={ref}
-          id={id}
+          id={inputId}
           required={required}
           disabled={disabled}
           aria-invalid={Boolean(error)}
@@ -97,12 +106,11 @@ const InputBox = forwardRef<HTMLInputElement, InputBoxProps>(function InputBox(
           )}
           {...props}
         />
-        {rightSlot ? (
-          <div className="flex shrink-0 items-center text-textLight">{rightSlot}</div>
-        ) : null}
+
+        {rightSlot && <div className="flex shrink-0 items-center text-textLight">{rightSlot}</div>}
       </div>
     </FieldShell>
   );
 });
 
-export default InputBox;
+export default React.memo(InputBox);

@@ -141,7 +141,7 @@ export default function Login() {
                       type="button"
                       variant="ghost"
                       tone="primary"
-                      size="sm"
+                      size="small"
                       className="min-h-0 px-0 text-sm font-medium lg:text-[15px]"
                     >
                       Forgot password?
@@ -164,7 +164,7 @@ export default function Login() {
                   <span className="text-xs text-textMuted">Protected session</span>
                 </div>
 
-                <Button type="submit" fullWidth size="lg" label="Sign in" />
+                <Button type="submit" reaponsive size="large" label="Sign in" />
               </form>
 
               <div className="mt-5 rounded-[22px] border border-surfaceSoft bg-base px-4 py-3 lg:px-5 lg:py-4">

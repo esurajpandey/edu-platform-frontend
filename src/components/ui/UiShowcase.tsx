@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Button from './Button';
 import Checkbox from './Checkbox';
-import DatePicker from './DatePicker';
 import InputBox from './InputBox';
 import Modal from './Modal';
 
@@ -46,12 +45,6 @@ export default function UiShowcase() {
             placeholder="Enter full name"
             variant="filled"
           />
-          <DatePicker
-            id="showcase-date"
-            label="Joining date"
-            description="Wrapped native picker with shared styling and typed props."
-            variant="filled"
-          />
           <Checkbox
             id="showcase-checkbox"
             label="Notify guardians"
@@ -79,12 +72,6 @@ export default function UiShowcase() {
             id="modal-title"
             label="Title"
             defaultValue="Admission reminder"
-            variant="filled"
-          />
-          <DatePicker
-            id="modal-date"
-            label="Reminder date"
-            defaultValue="2026-03-28"
             variant="filled"
           />
         </div>
