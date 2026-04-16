@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { Holiday } from '@/components/ui/DateInput';
 import SelectInput from '@/components/ui/SelectInput';
 export default function ShowCasePage() {
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date | null>(new Date());
   const onDateChange = (event: Date | null) => {
-    setDate(event ?? new Date());
+    setDate(event);
   };
 
   const holidays: Holiday[] = [
@@ -40,11 +40,16 @@ export default function ShowCasePage() {
       <h1 className="px-6 py-2 font-bold text-lg bg-primaryLight">UI Showcase</h1>
       <div className="flex flex-col p-8 w-full gap-4" style={{ height: 'calc(100dvh - 50px)' }}>
         <DateInput
+          label="Select Date"
+          required
           value={date}
           onChange={onDateChange}
           holidays={holidays}
           portalId="date-portal"
+          isClearable
+          size="large"
           excludeDates={excludeDates}
+          responsive
         />
         <SelectInput
           options={options}
@@ -53,7 +58,7 @@ export default function ShowCasePage() {
           label="Select Flavour"
           required
           responsive
-          size="medium"
+          size="large"
         />
       </div>
     </div>

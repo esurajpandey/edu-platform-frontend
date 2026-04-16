@@ -22,24 +22,35 @@
 }
 
 /* DatePicker */
-.react-datepicker__day--selected,
-.react-datepicker__day--keyboard-selected {
+.date-input .react-datepicker__day--selected,
+.date-input .react-datepicker__day--keyboard-selected {
   background-color: rgb(var(--color-primary)) !important;
   color: white !important; /* Ensure text remains readable */
   border-radius: 0.3rem; /* Optional: match your UI rounding */
 }
-.react-datepicker__input-container {
+.date-input .react-datepicker__input-container {
   margin-bottom: 5px !important;
 }
-.react-datepicker__input-container input {
+.date-input .react-datepicker__input-container input {
   padding-left: 30px !important;
   color: black;
 }
-.react-datepicker__day--selected:hover {
+.date-input .react-datepicker__day--selected:hover {
   background-color: rgb(var(--color-primary) / 0.8) !important;
 }
-.react-datepicker__calendar-icon {
+.date-input .react-datepicker__calendar-icon {
   position: absolute !important;
   top: 50%;
   transform: translateY(-50%);
+}
+.date-input .react-datepicker__close-icon::after {
+  background-color: rgb(var(--color-primary-dark)) !important;
+  position: absolute !important;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+}
+
+.date-input .react-datepicker__input-container :focus {
+  outline: 1px solid rgb(var(--color-primary) / 0.5) !important;
 }

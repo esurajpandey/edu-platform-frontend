@@ -32,7 +32,7 @@ function mergeRefs<T = unknown>(...refs: Array<React.Ref<T> | undefined>) {
     refs.forEach((ref) => {
       if (!ref) return;
       if (typeof ref === 'function') ref(node);
-      else (ref as React.MutableRefObject<T>).current = node;
+      else (ref as React.RefObject<T>).current = node;
     });
   };
 }
