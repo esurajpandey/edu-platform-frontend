@@ -15,3 +15,6 @@ export type ButtonIconConfig = {
   name: IconName;
   size?: IconSize;
 };
+
+export type ComponentSize = 'small' | 'medium' | 'large' | 'xlarge';
+export type ComponentTone = 'primary' | 'neutral' | 'danger' | 'success';
