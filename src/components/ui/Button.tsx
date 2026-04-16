@@ -5,8 +5,7 @@ import Icon from '@/components/Icon';
 import { cn } from '@/lib/cn';
 import { ButtonIconConfig, ButtonTone, ButtonVariant, ControlRadius } from '@/types';
 import { ComponentSize } from '@/types/ui.types';
-import { controlRadiusClasses } from './styles';
-import { sizeClasses } from './utils';
+import { controlRadiusClasses, sizeClasses } from './styles';
 
 /* ✅ Split base + interactive styles */
 const buttonBaseClasses: Record<ButtonVariant, Record<ButtonTone, string>> = {

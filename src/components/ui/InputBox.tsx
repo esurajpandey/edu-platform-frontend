@@ -4,8 +4,7 @@ import React, { forwardRef, InputHTMLAttributes, ReactNode, useId } from 'react'
 import { cn } from '@/lib/cn';
 import { ControlRadius, InputTone, InputVariant } from '@/types';
 import FieldShell from './FieldShell';
-import { controlRadiusClasses } from './styles';
-import { sizeClasses } from './utils';
+import { controlRadiusClasses, sizeClasses } from './styles';
 import { ComponentSize } from '@/types/ui.types';
 
 const inputVariantClasses: Record<InputVariant, string> = {

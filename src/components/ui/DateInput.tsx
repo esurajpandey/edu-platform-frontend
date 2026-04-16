@@ -5,8 +5,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ComponentSize } from '@/types/ui.types';
 import { IconSize } from '@/types/icon.types';
-import { sizeClasses } from './utils';
 import Icon from '@/components/Icon';
+import { sizeClasses } from './styles';
 
 export type HighlightDate = {
   [className: string]: Date[];

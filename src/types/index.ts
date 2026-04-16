@@ -5,7 +5,6 @@ export type {
   ButtonTone,
   ButtonVariant,
   ControlRadius,
-  ControlSize,
   InputTone,
   InputVariant,
   ModalSize,

@@ -3,7 +3,7 @@
 import React, { useId, forwardRef, useCallback, useMemo, useState } from 'react';
 import { useCombobox } from 'downshift';
 import { ComponentSize } from '@/types/ui.types';
-import { sizeClasses } from './utils';
+import { sizeClasses } from './styles';
 
 interface Option {
   value: string | number;
