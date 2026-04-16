@@ -1,9 +1,10 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import Icon from '@/components/Icon';
 import { cn } from '@/lib/cn';
-import { ButtonIconConfig, ButtonTone, ButtonVariant, ControlRadius, ControlSize } from '@/types';
-import { controlRadiusClasses, controlSizeClasses } from './styles';
-
+import { ButtonIconConfig, ButtonTone, ButtonVariant, ControlRadius } from '@/types';
+import { ComponentSize } from '@/types/ui.types';
+import { controlRadiusClasses } from './styles';
+import { sizeClasses } from './utils';
 const buttonVariantClasses: Record<ButtonVariant, Record<ButtonTone, string>> = {
   solid: {
     primary: 'bg-primary text-surface hover:bg-primaryDark focus-visible:ring-primary/12',
@@ -32,11 +33,11 @@ const buttonVariantClasses: Record<ButtonVariant, Record<ButtonTone, string>> = 
 
 export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color'> & {
   label?: string;
-  size?: ControlSize;
+  size?: ComponentSize;
   variant?: ButtonVariant;
   tone?: ButtonTone;
   radius?: ControlRadius;
-  fullWidth?: boolean;
+  reaponsive?: boolean;
   leadingIcon?: ButtonIconConfig;
   trailingIcon?: ButtonIconConfig;
   isLoading?: boolean;
@@ -48,11 +49,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
     label,
     children,
     className,
-    size = 'md',
+    size = 'medium',
     variant = 'solid',
     tone = 'primary',
-    radius = 'lg',
-    fullWidth = false,
+    radius = 'md',
+    reaponsive = false,
     leadingIcon,
     trailingIcon,
     isLoading = false,
@@ -69,11 +70,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
       type={type}
       disabled={isDisabled}
       className={cn(
-        'inline-flex shrink-0 items-center justify-center gap-2.5 font-semibold transition duration-200 outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent disabled:pointer-events-none disabled:opacity-55',
-        controlSizeClasses[size],
+        'inline-flex shrink-0 items-center justify-center gap-2.5 font-semibold transition duration-200 outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent disabled:cursor-not-allowed disabled:opacity-55',
+        sizeClasses[size],
         controlRadiusClasses[radius],
         buttonVariantClasses[variant][tone],
-        fullWidth && 'w-full',
+        reaponsive ? 'w-full md:w-auto' : 'w-full',
         className,
       )}
       {...props}

@@ -3,6 +3,7 @@ import DateInput from '@/components/ui/DateInput';
 import { useState } from 'react';
 import { Holiday } from '@/components/ui/DateInput';
 import SelectInput from '@/components/ui/SelectInput';
+import Button from '@/components/ui/Button';
 export default function ShowCasePage() {
   const [date, setDate] = useState<Date | null>(new Date());
   const onDateChange = (event: Date | null) => {
@@ -60,6 +61,8 @@ export default function ShowCasePage() {
           responsive
           size="large"
         />
+
+        <Button label="Button" size="large" variant="outline" />
       </div>
     </div>
   );

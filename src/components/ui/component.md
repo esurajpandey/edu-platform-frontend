@@ -67,3 +67,25 @@ interface Option {
 | `name` | `string` | `undefined` | Generates a hidden input field for native form submissions. |
 | `clearable` | `boolean` | `true` | Allows clearing the currently selected choice back to empty. |
 | `responsive` | `boolean` | `false` | Adjusts width based on viewport logic (mobile vs. tablet/desktop width). |
+
+---
+
+## Button
+
+The `Button` component is a flexible, highly customizable button element supporting various variants, tones, and sizes. _(Note: The codebase does not currently contain a `ButtonGroup` component, so only `Button` is documented here)._
+
+### Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | `undefined` | Display text for the button (can also use `children`). |
+| `size` | `ComponentSize` | `'medium'` | Sizing scale: `'small'`, `'medium'`, `'large'`, `'xlarge'`. |
+| `variant` | `ButtonVariant` | `'solid'` | Visual style of the button: `'solid'`, `'outline'`, `'ghost'`, `'soft'`. |
+| `tone` | `ButtonTone` | `'primary'` | Semantic color tone: `'primary'`, `'neutral'`, `'danger'`. |
+| `radius` | `ControlRadius` | `'md'` | Border radius: `'none'`, `'sm'`, `'md'`, `'lg'`, `'full'`. |
+| `reaponsive` | `boolean` | `false` | **Note the typo in source code**. Adjusts width to 100% on mobile and auto on md+ if true. |
+| `leadingIcon` | `ButtonIconConfig` | `undefined` | Configuration for an icon placed before the label. |
+| `trailingIcon` | `ButtonIconConfig` | `undefined` | Configuration for an icon placed after the label. |
+| `isLoading` | `boolean` | `false` | Shows a loading spinner and disables the button. |
+| `disabled` | `boolean` | `false` | Standard HTML disabled attribute. Disables the button. |
+| `...props` | `HTMLButtonAttributes` |  | Any standard HTML button attributes (e.g. `onClick`, `type`, `className`). |
