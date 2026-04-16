@@ -184,7 +184,7 @@ export default function Modal({
                 aria-label="Close modal"
                 variant="ghost"
                 tone="neutral"
-                size="sm"
+                size="small"
                 className="min-h-10 min-w-10 px-0"
                 onClick={onClose}
               >
