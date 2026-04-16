@@ -50,7 +50,7 @@ const iconSizeMap: Record<ControlSize, IconSize> = {
 export type TFilterDate = (date: Date) => boolean;
 
 export default function DateInput({
-  value,
+  value = new Date(),
   onChange,
   className,
   placeholderText = 'Select Date',
