@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Holiday } from '@/components/ui/DateInput';
 import SelectInput from '@/components/ui/SelectInput';
 import Button from '@/components/ui/Button';
+
+import InputBox from '@/components/ui/InputBox';
 export default function ShowCasePage() {
   const [date, setDate] = useState<Date | null>(new Date());
   const onDateChange = (event: Date | null) => {
@@ -43,6 +45,7 @@ export default function ShowCasePage() {
         <DateInput
           label="Select Date"
           required
+          disabled
           value={date}
           onChange={onDateChange}
           holidays={holidays}
@@ -58,11 +61,19 @@ export default function ShowCasePage() {
           value={selectValue}
           label="Select Flavour"
           required
+          disabled
           responsive
           size="large"
         />
 
-        <Button label="Button" size="large" variant="outline" />
+        <Button label="Button" size="large" variant="outline" disabled />
+        <InputBox
+          type="number"
+          label="InputBox"
+          size="large"
+          placeholder="Welcome to input"
+          required
+        />
       </div>
     </div>
   );

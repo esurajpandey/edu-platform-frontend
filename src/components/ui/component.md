@@ -89,3 +89,26 @@ The `Button` component is a flexible, highly customizable button element support
 | `isLoading` | `boolean` | `false` | Shows a loading spinner and disables the button. |
 | `disabled` | `boolean` | `false` | Standard HTML disabled attribute. Disables the button. |
 | `...props` | `HTMLButtonAttributes` |  | Any standard HTML button attributes (e.g. `onClick`, `type`, `className`). |
+
+---
+
+## InputBox
+
+The `InputBox` component is a fully-featured, accessible text input wrapper that includes support for labels, descriptions, error messages, and customizable edge slots.
+
+### Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `ReactNode` | `undefined` | Top label displayed above the input field. |
+| `description` | `ReactNode` | `undefined` | Helper text displayed directly below the input field. |
+| `error` | `ReactNode` | `undefined` | Error message displayed below the input. Takes tone precedence to `'danger'`. |
+| `size` | `ComponentSize` | `'medium'` | Sizing scale: `'small'`, `'medium'`, `'large'`, `'xlarge'`. |
+| `radius` | `ControlRadius` | `'md'` | Border radius: `'none'`, `'sm'`, `'md'`, `'lg'`, `'full'`. |
+| `variant` | `InputVariant` | `'default'` | Visual style of the input container: `'default'`, `'filled'`. |
+| `tone` | `InputTone` | `'default'` | Semantic color tone. Automatically becomes `'danger'` if an error is provided. |
+| `inputClassName` | `string` | `undefined` | Additional CSS classes passed strictly to the native `<input>` element. |
+| `leftSlot` | `ReactNode` | `undefined` | Content to render on the left side inside the input wrapper (e.g. an icon). |
+| `rightSlot` | `ReactNode` | `undefined` | Content to render on the right side inside the input wrapper. |
+| `rootClassName` | `string` | `undefined` | Additional CSS classes passed to the inner bounding container of the input. |
+| `...props` | `InputHTMLAttributes` |  | Standard HTML input attributes (`type`, `value`, `placeholder`, `disabled`, etc.). |

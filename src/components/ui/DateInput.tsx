@@ -37,7 +37,7 @@ interface DatePickerProps {
   onCalendarOpen?: () => void;
   isClearable?: boolean;
   showInFullScreen?: boolean;
-  isDisabled?: boolean;
+  disabled?: boolean;
   excludeDates?: Date[];
   weekendsDisabled?: boolean;
   highlightDates?: HighlightDate[];
@@ -75,7 +75,7 @@ export default function DateInput({
   showTimeSelectOnly,
   isClearable = false,
   showInFullScreen = false,
-  isDisabled = false,
+  disabled = false,
   excludeDates = [],
   weekendsDisabled = false,
   highlightDates = [],
@@ -134,7 +134,7 @@ export default function DateInput({
         showTimeSelect={showTimeSelect}
         showTimeSelectOnly={showTimeSelectOnly}
         isClearable={isClearable}
-        disabled={isDisabled}
+        disabled={disabled}
         excludeDates={excludeDates}
         filterDate={weekendsDisabled ? isWeekday : undefined}
         highlightDates={highlightDates}

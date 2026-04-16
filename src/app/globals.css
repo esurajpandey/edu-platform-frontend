@@ -54,3 +54,16 @@
 .date-input .react-datepicker__input-container :focus {
   outline: 1px solid rgb(var(--color-primary) / 0.5) !important;
 }
+
+/* InputBox */
+/* Chrome, Safari, Edge */
+.input-box input[type='number']::-webkit-outer-spin-button,
+.input-box input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+.input-box input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
