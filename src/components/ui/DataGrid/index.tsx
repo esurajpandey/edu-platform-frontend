@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { GridProps, GridColumn } from './type';
+import { GridProps } from './type';
 import { getColumnDef, getTransformData } from './config';
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
 import DragIcon from './icons';
