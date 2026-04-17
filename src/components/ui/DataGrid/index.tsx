@@ -21,12 +21,9 @@ const DataGrid = ({ header = [], dataset = [], isLoading = false }: GridProps) =
     );
 
   return (
-    <div className="w-full h-full p-4 bg-base">
-      <div className="h-full flex flex-col overflow-hidden border border-textMuted/30 rounded-xl shadow-sm bg-surface">
-        {/* Main Scroll Container:
-          - overflow-auto handles both vertical and horizontal scroll
-        */}
-        <div className="flex-grow overflow-auto relative custom-scrollbar">
+    <div className="w-full h-full bg-base">
+      <div className="h-full flex flex-col overflow-hidden border border-textMuted/30 rounded-md shadow-sm bg-surface">
+        <div className="flex-grow overflow-auto relative">
           <table
             style={{
               width: '100%',
@@ -48,6 +45,7 @@ const DataGrid = ({ header = [], dataset = [], isLoading = false }: GridProps) =
                         style={{
                           width: isLastColumn ? 'auto' : header.getSize(),
                           position: 'relative',
+                          textAlign: header.column.columnDef.meta?.align,
                         }}
                         className={`px-2 py-4 text-xs font-bold capitalize tracking-wider text-textLight border-b border-r border-textMuted/20 last:border-r-0 bg-surfaceSoft shadow-[0_1px_0_0_rgba(var(--color-text-muted),0.1)]`}
                       >
@@ -88,6 +86,7 @@ const DataGrid = ({ header = [], dataset = [], isLoading = false }: GridProps) =
                         key={cell.id}
                         style={{
                           width: isLastColumn ? 'auto' : cell.column.getSize(),
+                          textAlign: cell.column.columnDef.meta?.align,
                         }}
                         className="px-2 py-2 text-sm text-text border border-textMuted/10 last:border-r-0 whitespace-nowrap overflow-hidden text-ellipsis"
                       >

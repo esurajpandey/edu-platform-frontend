@@ -1,5 +1,15 @@
-import { createColumnHelper } from '@tanstack/react-table';
-import { GridColumn } from './type';
+import { createColumnHelper, RowData } from '@tanstack/react-table';
+import { GridColumn, GridColumnType } from './type';
+
+declare module '@tanstack/react-table' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData extends RowData, TValue> {
+    align?: 'left' | 'center' | 'right';
+    type: GridColumnType;
+    editable?: boolean;
+  }
+}
+
 const createUniqueId = () => {
   return Math.random().toString(36).substr(2, 9);
 };
@@ -17,9 +27,9 @@ export const getColumnDef = (header: GridColumn[], showSequence: boolean = true)
     field: '_sNo',
     label: 'S.No',
     type: GRID_COLUMN_TYPE.NUMBER,
-    width: 70,
+    width: 60,
   };
-   
+
   const finalHeader = showSequence ? [sequenceColumn, ...header] : [...header];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,6 +46,7 @@ export const getColumnDef = (header: GridColumn[], showSequence: boolean = true)
       meta: {
         type: column.type,
         editable: column.editable,
+        align: column.field === '_sNo' ? 'center' : 'left',
       },
     });
   });
