@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { GridProps } from './type';
 import { getColumnDef } from './config';
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
+import DragIcon from './icons';
 
 const DataGrid = ({ header = [], dataset = [], isLoading = false }: GridProps) => {
   const columns = useMemo(() => getColumnDef(header), [header]);
@@ -29,11 +30,8 @@ const DataGrid = ({ header = [], dataset = [], isLoading = false }: GridProps) =
         <div className="flex-grow overflow-auto relative custom-scrollbar">
           <table
             style={{
-              /* CRITICAL FOR PRECISION:
-                - table.getCenterTotalSize() provides the exact pixel sum of all columns.
-                - This ensures horizontal scroll triggers correctly when columns expand.
-              */
-              width: table.getCenterTotalSize(),
+              width: '100%',
+              minWidth: table.getCenterTotalSize(),
               tableLayout: 'fixed',
               borderCollapse: 'separate',
               borderSpacing: 0,
@@ -43,15 +41,16 @@ const DataGrid = ({ header = [], dataset = [], isLoading = false }: GridProps) =
             <thead className="sticky top-0 z-30">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
+                  {headerGroup.headers.map((header, index) => {
+                    const isLastColumn = index === headerGroup.headers.length - 1;
                     return (
                       <th
                         key={header.id}
                         style={{
-                          width: header.getSize(), // Returns pixel value
+                          width: isLastColumn ? 'auto' : header.getSize(),
                           position: 'relative',
                         }}
-                        className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-textLight border-b border-r border-textMuted/20 last:border-r-0 bg-surfaceSoft shadow-[0_1px_0_0_rgba(var(--color-text-muted),0.1)]"
+                        className="px-6 py-4 text-xs font-bold capitalize tracking-wider text-textLight border-b border-r border-textMuted/20 last:border-r-0 bg-surfaceSoft shadow-[0_1px_0_0_rgba(var(--color-text-muted),0.1)]"
                       >
                         <div className="truncate">
                           {header?.isPlaceholder
@@ -64,10 +63,11 @@ const DataGrid = ({ header = [], dataset = [], isLoading = false }: GridProps) =
                           <div
                             onMouseDown={header.getResizeHandler()}
                             onTouchStart={header.getResizeHandler()}
-                            className={`absolute right-0 top-0 h-full w-1 cursor-col-resize select-none touch-none z-10
-                              hover:bg-primary/50 transition-colors
-                              ${header.column.getIsResizing() ? 'bg-primary w-1' : 'bg-transparent'}`}
-                          />
+                            className={`absolute right-0 top-0 h-full flex items-center justify-center cursor-col-resize select-none touch-none z-10
+      ${header.column.getIsResizing() ? 'bg-text/20' : 'bg-transparent hover:bg-text/10'}`}
+                          >
+                            <DragIcon />
+                          </div>
                         )}
                       </th>
                     );
@@ -80,16 +80,17 @@ const DataGrid = ({ header = [], dataset = [], isLoading = false }: GridProps) =
               {table.getRowModel().rows.map((row) => (
                 <tr
                   key={row.id}
-                  className="hover:bg-primaryLight/5 transition-colors duration-150 group"
+                  className="hover:bg-textMuted/10 transition-colors duration-200 group"
                 >
-                  {row.getVisibleCells().map((cell) => {
+                  {row.getVisibleCells().map((cell, index) => {
+                    const isLastColumn = index === row.getVisibleCells().length - 1;
                     return (
                       <td
                         key={cell.id}
                         style={{
-                          width: cell.column.getSize(),
+                          width: isLastColumn ? 'auto' : cell.column.getSize(),
                         }}
-                        className="px-6 py-3 text-sm text-text border-r border-textMuted/10 last:border-r-0 whitespace-nowrap overflow-hidden text-ellipsis"
+                        className="px-6 py-2 text-sm text-text border border-textMuted/10 last:border-r-0 whitespace-nowrap overflow-hidden text-ellipsis"
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
