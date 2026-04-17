@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
-import { GridProps } from './type';
-import { getColumnDef } from './config';
+import { GridProps, GridColumn } from './type';
+import { getColumnDef, getTransformData } from './config';
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
 import DragIcon from './icons';
 
 const DataGrid = ({ header = [], dataset = [], isLoading = false }: GridProps) => {
   const columns = useMemo(() => getColumnDef(header), [header]);
-  const data = useMemo(() => dataset, [dataset]);
-
+  const data = useMemo(() => getTransformData(dataset), [dataset]);
   const table = useReactTable({
     data,
     columns,
@@ -50,7 +49,7 @@ const DataGrid = ({ header = [], dataset = [], isLoading = false }: GridProps) =
                           width: isLastColumn ? 'auto' : header.getSize(),
                           position: 'relative',
                         }}
-                        className="px-6 py-4 text-xs font-bold capitalize tracking-wider text-textLight border-b border-r border-textMuted/20 last:border-r-0 bg-surfaceSoft shadow-[0_1px_0_0_rgba(var(--color-text-muted),0.1)]"
+                        className={`px-2 py-4 text-xs font-bold capitalize tracking-wider text-textLight border-b border-r border-textMuted/20 last:border-r-0 bg-surfaceSoft shadow-[0_1px_0_0_rgba(var(--color-text-muted),0.1)]`}
                       >
                         <div className="truncate">
                           {header?.isPlaceholder
@@ -90,7 +89,7 @@ const DataGrid = ({ header = [], dataset = [], isLoading = false }: GridProps) =
                         style={{
                           width: isLastColumn ? 'auto' : cell.column.getSize(),
                         }}
-                        className="px-6 py-2 text-sm text-text border border-textMuted/10 last:border-r-0 whitespace-nowrap overflow-hidden text-ellipsis"
+                        className="px-2 py-2 text-sm text-text border border-textMuted/10 last:border-r-0 whitespace-nowrap overflow-hidden text-ellipsis"
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
