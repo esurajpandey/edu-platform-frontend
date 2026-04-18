@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 import DateInput from '@/components/ui/DateInput';
 import { useState } from 'react';
@@ -73,7 +74,7 @@ export default function ShowCasePage() {
 
   const getDataSet = () => {
     const dataSet: unknown[] = [];
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 1000; i++) {
       dataSet.push({
         name: `Name ${i}`,
         age: i,
