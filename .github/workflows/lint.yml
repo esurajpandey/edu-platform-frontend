@@ -23,7 +23,16 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: |
+          for attempt in 1 2 3; do
+            yarn install --frozen-lockfile --prefer-offline && exit 0
+            if [ "$attempt" -lt 3 ]; then
+              echo "yarn install failed on attempt $attempt. Retrying in 15 seconds..."
+              sleep 15
+            fi
+          done
+          echo "yarn install failed after 3 attempts."
+          exit 1
 
       - name: Run ESLint
         run: yarn lint
@@ -44,7 +53,16 @@ jobs:
           node-version: '22.x'
           cache: 'yarn'
 
-      - run: yarn install --frozen-lockfile
+      - run: |
+          for attempt in 1 2 3; do
+            yarn install --frozen-lockfile --prefer-offline && exit 0
+            if [ "$attempt" -lt 3 ]; then
+              echo "yarn install failed on attempt $attempt. Retrying in 15 seconds..."
+              sleep 15
+            fi
+          done
+          echo "yarn install failed after 3 attempts."
+          exit 1
       - run: yarn type-check
 
   build:
@@ -61,5 +79,14 @@ jobs:
           node-version: '22.x'
           cache: 'yarn'
 
-      - run: yarn install --frozen-lockfile
+      - run: |
+          for attempt in 1 2 3; do
+            yarn install --frozen-lockfile --prefer-offline && exit 0
+            if [ "$attempt" -lt 3 ]; then
+              echo "yarn install failed on attempt $attempt. Retrying in 15 seconds..."
+              sleep 15
+            fi
+          done
+          echo "yarn install failed after 3 attempts."
+          exit 1
       - run: yarn build
