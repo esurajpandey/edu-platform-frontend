@@ -26,10 +26,10 @@ export const getAccessToken = () => {
     return accessTokenMemory;
   }
 
-  // const storedToken = readStoredAccessToken();
-  // if (storedToken) {
-  //   accessTokenMemory = storedToken;
-  // }
+  const storedToken = readStoredAccessToken();
+  if (storedToken) {
+    accessTokenMemory = storedToken;
+  }
 
   return accessTokenMemory;
 };
