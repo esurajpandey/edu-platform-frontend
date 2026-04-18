@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -9,7 +10,7 @@ export function proxy(request: NextRequest) {
   const cookie = request.cookies.get('refreshToken');
   const { pathname } = request.nextUrl;
   const isPublicPath = pathname === '/' || pathname === '/login';
-  console.warn({ cookie, isPublicPath, pathname });
+  console.log({ cookie, isPublicPath, pathname });
   if (cookie?.value && isPublicPath) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
