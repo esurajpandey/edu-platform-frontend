@@ -17,14 +17,14 @@ export function proxy(request: NextRequest) {
   console.log(`Path: ${pathname} | HasCookie: ${!!cookie?.value}`);
 
   // 1. If user has a token and tries to go to login -> send to dashboard
-  // if (cookie?.value && isPublicPath) {
-  //   return NextResponse.redirect(new URL('/dashboard', request.url));
-  // }
+  if (cookie?.value && isPublicPath) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
 
   // 2. If user has NO token and tries to go to protected route -> send to login
-  // if (!cookie?.value && !isPublicPath) {
-  //   return NextResponse.redirect(new URL('/login', request.url));
-  // }
+  if (!cookie?.value && !isPublicPath) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
 
   return NextResponse.next();
 }
