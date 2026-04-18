@@ -8,6 +8,9 @@ export const sizeClasses = {
 };
 
 export const controlRadiusClasses: Record<ControlRadius, string> = {
+  none: 'rounded-none',
+  xs: 'rounded-xs',
+  sm: 'rounded-md',
   md: 'rounded-xl',
   lg: 'rounded-2xl',
   xl: 'rounded-[20px]',

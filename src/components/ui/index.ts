@@ -6,3 +6,4 @@ export { default as Loader } from './Loader';
 export { default as Modal } from './Modal';
 export { default as SelectInput } from './SelectInput';
 export { default as UiShowcase } from './UiShowcase';
+export { default as Icon } from '../Icon';

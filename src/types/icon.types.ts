@@ -21,7 +21,9 @@ export type IconName =
   | 'notification'
   | 'logout'
   | 'help'
-  | 'user';
+  | 'user'
+  | 'chevronLeft'
+  | 'chevronRight';
 
 export type IconSize = 'tiny' | 'small' | 'medium' | 'large';
 

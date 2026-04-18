@@ -195,7 +195,7 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
             className={`
               w-full flex items-center border rounded-md shadow-sm
               bg-surface text-text
-              ${error ? 'border-danger' : 'border-surfaceSoft'}
+              ${error ? 'border-danger' : 'border-textMuted/30'}
               ${!disabled && 'hover:border-primary/50'}
               ${disabled && 'bg-surfaceSoft cursor-not-allowed'}
               ${sizeClasses[size]}

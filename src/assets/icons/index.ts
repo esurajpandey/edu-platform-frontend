@@ -2,6 +2,8 @@ import AttendanceIcon from './attendance';
 import CalendarIcon from './calendar';
 import ClassesIcon from './classes';
 import ChevronDownIcon from './chevron-down';
+import ChevronLeftIcon from './chevron-left';
+import ChevronRightIcon from './chevron-right';
 import CloseIcon from './close';
 import DashboardIcon from './dashboard';
 import ExamsIcon from './exams';
@@ -26,6 +28,8 @@ export const icons: IconRegistry = {
   calendar: CalendarIcon,
   classes: ClassesIcon,
   chevronDown: ChevronDownIcon,
+  chevronLeft: ChevronLeftIcon,
+  chevronRight: ChevronRightIcon,
   close: CloseIcon,
   dashboard: DashboardIcon,
   exams: ExamsIcon,
