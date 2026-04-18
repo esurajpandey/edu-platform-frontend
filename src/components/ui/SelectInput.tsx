@@ -1,6 +1,15 @@
 'use client';
 
-import React, { useId, forwardRef, useCallback, useMemo, useState } from 'react';
+import React, {
+  useId,
+  forwardRef,
+  useCallback,
+  useMemo,
+  useState,
+  useLayoutEffect,
+  useRef,
+} from 'react';
+import { createPortal } from 'react-dom';
 import { useCombobox } from 'downshift';
 import { ComponentSize } from '@/types/ui.types';
 import { sizeClasses } from './styles';
@@ -27,12 +36,12 @@ interface SelectInputProps {
   responsive?: boolean;
 }
 
-function mergeRefs<T = unknown>(...refs: Array<React.Ref<T> | undefined>) {
+function mergeRefs<T>(...refs: Array<React.Ref<T> | undefined>) {
   return (node: T) => {
     refs.forEach((ref) => {
       if (!ref) return;
       if (typeof ref === 'function') ref(node);
-      else (ref as React.RefObject<T>).current = node;
+      else (ref as React.RefObject<T | null>).current = node;
     });
   };
 }
@@ -58,11 +67,16 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
     ref,
   ) => {
     const id = useId();
-
+    const containerRef = useRef<HTMLDivElement>(null);
     const [inputValue, setInputValue] = useState('');
+    const [coords, setCoords] = useState({
+      top: 0,
+      left: 0,
+      width: 0,
+      isBottom: true,
+    });
     const [isTyping, setIsTyping] = useState(false);
 
-    // ✅ Controlled selected item
     const selectedItem = useMemo(
       () => options.find((opt) => opt.value === value) || null,
       [options, value],
@@ -90,13 +104,13 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
       getItemProps,
       getLabelProps,
       reset,
-    } = useCombobox({
+    } = useCombobox<Option>({
       id,
       items: filteredItems,
       itemToString: (item) => (item ? item.label : ''),
       selectedItem,
       inputValue,
-
+      defaultHighlightedIndex: 0,
       onInputValueChange: ({ inputValue, type }) => {
         if (type === useCombobox.stateChangeTypes.InputChange) {
           setIsTyping(true);
@@ -113,6 +127,36 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
       },
     });
 
+    useLayoutEffect(() => {
+      if (!isOpen) return;
+
+      const updatePosition = () => {
+        if (!containerRef.current) return;
+
+        const rect = containerRef.current.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const menuHeight = 256;
+
+        const shouldShowAbove = spaceBelow < menuHeight && rect.top > menuHeight;
+
+        setCoords({
+          top: shouldShowAbove ? rect.top + window.scrollY : rect.bottom + window.scrollY,
+          left: rect.left + window.scrollX,
+          width: rect.width,
+          isBottom: !shouldShowAbove,
+        });
+      };
+
+      updatePosition();
+      window.addEventListener('scroll', updatePosition);
+      window.addEventListener('resize', updatePosition);
+
+      return () => {
+        window.removeEventListener('scroll', updatePosition);
+        window.removeEventListener('resize', updatePosition);
+      };
+    }, [isOpen]);
+
     const inputProps = getInputProps({
       placeholder,
       disabled,
@@ -120,9 +164,11 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
     }) as ReturnType<typeof getInputProps> & {
       ref?: React.Ref<HTMLInputElement>;
     };
+    const menuProps = getMenuProps({}, { suppressRefError: true });
 
     return (
       <div
+        ref={containerRef}
         className={`flex flex-col ${responsive ? 'w-full md:w-1/2' : 'w-full'} gap-1.5 ${className}`}
       >
         {label && (
@@ -147,6 +193,9 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
               {...inputProps}
               ref={mergeRefs(inputProps.ref, ref)}
               className="w-full bg-transparent outline-transparent text-left"
+              aria-invalid={!!error}
+              aria-required={required}
+              aria-describedby={error ? `${id}-error` : undefined}
             />
 
             {clearable && selectedItem && !disabled && (
@@ -173,26 +222,31 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
               <path strokeWidth="2" d="M19 9l-7 7-7-7" />
             </svg>
           </div>
+        </div>
 
-          <ul
-            {...getMenuProps()}
-            className={`
-              absolute z-[100] w-full mt-1 max-h-64 overflow-auto
-              border rounded-md shadow-xl bg-surface
-              ${!isOpen ? 'hidden' : ''}
-            `}
-          >
-            {isOpen && (
-              <>
-                {filteredItems.length === 0 && (
-                  <li className="px-3 py-3 text-sm text-textMuted">No results</li>
-                )}
+        {isOpen &&
+          typeof document !== 'undefined' &&
+          createPortal(
+            <ul
+              {...menuProps}
+              className="fixed z-50 bg-surface border rounded-md shadow-lg overflow-auto"
+              style={{
+                top: coords.isBottom ? coords.top : 'auto',
+                bottom: !coords.isBottom ? window.innerHeight - coords.top + 5 : 'auto',
+                left: coords.left,
+                width: coords.width,
+                maxHeight: 256,
+              }}
+            >
+              {filteredItems.length === 0 && (
+                <li className="px-3 py-2 text-sm text-textMuted">No results</li>
+              )}
 
-                {filteredItems.map((item, index) => (
-                  <li
-                    key={`${item.value}-${index}`}
-                    {...getItemProps({ item, index })}
-                    className={`
+              {filteredItems.map((item, index) => (
+                <li
+                  key={item.value}
+                  {...getItemProps({ item, index })}
+                  className={`
                       px-3 py-2 text-sm cursor-pointer
                       ${highlightedIndex === index ? 'bg-primary text-white' : ''}
                       ${
@@ -201,18 +255,21 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
                           : ''
                       }
                     `}
-                  >
-                    {item.label}
-                  </li>
-                ))}
-              </>
-            )}
-          </ul>
-        </div>
+                >
+                  {item.label}
+                </li>
+              ))}
+            </ul>,
+            document.body,
+          )}
 
-        <input type="hidden" name={name} value={selectedItem?.value || ''} required={required} />
+        <input type="hidden" name={name} value={selectedItem?.value ?? ''} required={required} />
 
-        {error && <p className="text-xs text-danger">{error}</p>}
+        {error && (
+          <p id={`${id}-error`} className="text-xs text-danger">
+            {error}
+          </p>
+        )}
       </div>
     );
   },
