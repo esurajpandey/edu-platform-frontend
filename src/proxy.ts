@@ -2,16 +2,11 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function proxy(request: NextRequest) {
-  if (process.env.NODE_ENV === 'development') {
-    return NextResponse.next();
-  }
-
   const cookie = request.cookies.get('refreshToken');
   const { pathname } = request.nextUrl;
   const isPublicPath = pathname === '/' || pathname === '/login';
 
   if (cookie?.value && isPublicPath) {
-    console.error({ cookie, isPublicPath });
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
