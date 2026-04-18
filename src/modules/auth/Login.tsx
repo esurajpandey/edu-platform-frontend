@@ -2,12 +2,14 @@
 import { useState } from 'react';
 import { Button, Checkbox, EduPlatformLogo, Icon, InputBox } from '@/components';
 import { useAuthStore } from '@/store/auth/auth.store';
+import { useRouter } from 'next/navigation';
 import { getHomeRouteForSystemRole } from '@/lib/auth-redirect';
 import appToast from '@/lib/toast';
 import { highlights } from './utils';
 
 export default function Login() {
   const { onLogin } = useAuthStore();
+  const router = useRouter();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -22,7 +24,7 @@ export default function Login() {
       return;
     }
     if (result.success && 'data' in result) {
-      window.location.assign(getHomeRouteForSystemRole(result.data.user.systemRole));
+      router.push(getHomeRouteForSystemRole(result.data.user.systemRole));
       return;
     }
   };

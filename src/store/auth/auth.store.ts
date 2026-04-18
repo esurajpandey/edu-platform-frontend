@@ -8,44 +8,10 @@ import { LoginPayload, FetchUserResponse } from './auth.type';
 
 let accessTokenMemory: string | undefined;
 let bootstrapPromise: Promise<boolean> | null = null;
-const DEV_ACCESS_TOKEN_STORAGE_KEY = 'edu-platform.dev-access-token';
 
-const canUseDevTokenStorage = () =>
-  process.env.NODE_ENV === 'development' && typeof window !== 'undefined';
-
-const readStoredAccessToken = () => {
-  if (!canUseDevTokenStorage()) {
-    return undefined;
-  }
-
-  return window.localStorage.getItem(DEV_ACCESS_TOKEN_STORAGE_KEY) ?? undefined;
-};
-
-export const getAccessToken = () => {
-  if (accessTokenMemory) {
-    return accessTokenMemory;
-  }
-
-  // const storedToken = readStoredAccessToken();
-  // if (storedToken) {
-  //   accessTokenMemory = storedToken;
-  // }
-
-  return accessTokenMemory;
-};
+export const getAccessToken = () => accessTokenMemory;
 export const setAccessToken = (token?: string) => {
   accessTokenMemory = token;
-
-  if (!canUseDevTokenStorage()) {
-    return;
-  }
-
-  if (token) {
-    window.localStorage.setItem(DEV_ACCESS_TOKEN_STORAGE_KEY, token);
-    return;
-  }
-
-  window.localStorage.removeItem(DEV_ACCESS_TOKEN_STORAGE_KEY);
 };
 
 interface AuthState {
