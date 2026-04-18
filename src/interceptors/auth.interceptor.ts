@@ -20,6 +20,7 @@ export const setupApiInterceptors = (client: AxiosInstance): void => {
     const token = getAccessToken();
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
+      config.withCredentials = true;
     }
     return config;
   });
