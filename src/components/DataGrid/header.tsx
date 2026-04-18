@@ -8,7 +8,7 @@ interface GridHeaderProps {
 
 const GridHeader = ({ headerGroups }: GridHeaderProps) => {
   return (
-    <thead className="sticky top-0 z-10">
+    <thead className="sticky top-0 z-5">
       {headerGroups.map((headerGroup) => (
         <tr key={headerGroup.id}>
           {headerGroup.headers.map((header, index) => {

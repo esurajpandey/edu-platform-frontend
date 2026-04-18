@@ -12,7 +12,11 @@ export default function SchoolList() {
   });
   const dataset = getSchoolDataset(schoolsById);
   return (
-    <MainWrapper tobBar headerSection={<div>All Schools</div>}>
+    <MainWrapper
+      tobBar
+      pageTitle="All Schools"
+      pageSubTitle="Manage schools and school groups with school admin"
+    >
       <DataGrid header={columns} dataset={dataset} isLoading={isLoading} />
     </MainWrapper>
   );

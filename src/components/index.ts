@@ -1,8 +1,8 @@
 export { default as Icon } from './Icon';
 export { default as EduPlatformLogo } from '../assets/logos/EduPlatformLogo';
 export { default as MainWrapper } from './MainWrapper/Index';
-export { default as DataGrid } from './ui/DataGrid';
-export { GRID_COLUMN_TYPE } from './ui/DataGrid/config';
+export { default as DataGrid } from './DataGrid';
+export { GRID_COLUMN_TYPE } from './DataGrid/config';
 
 export {
   Button,
@@ -16,4 +16,4 @@ export {
 } from './ui';
 export type { IconColor, IconName, IconSize } from '@/types';
 
-export type { GridColumn, GridProps } from './ui/DataGrid/type';
+export type { GridColumn, GridProps } from './DataGrid/type';
