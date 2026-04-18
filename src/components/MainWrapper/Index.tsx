@@ -14,7 +14,7 @@ const MainWrapper = ({ children, tobBar, headerSection, actionSection }: MainWra
         </div>
       )}
       <div
-        className="flex flex-col overflow-y-auto px-2 py-1"
+        className="flex flex-col overflow-y-auto p-1"
         style={{ height: `calc(100dvh - ${tobBar ? 120 : 30}px)` }}
       >
         {children}

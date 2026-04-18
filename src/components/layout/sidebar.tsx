@@ -44,7 +44,7 @@ export default function DeveloperSidebar({
 
   return (
     <>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 z-999">
         <EduPlatformLogo />
         <div className="min-w-0">
           <h1 className="truncate text-base font-semibold tracking-tight text-text">

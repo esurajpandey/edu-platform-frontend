@@ -1,13 +1,19 @@
-import { MainWrapper } from '@/components';
-
+'use client';
+import { MainWrapper, DataGrid } from '@/components';
+import { getSchoolColumns, getSchoolDataset } from './utils';
+import { useDeveloperStore } from '@/store/developer/developer.store';
+import { useQuery } from '@tanstack/react-query';
 export default function SchoolList() {
+  const columns = getSchoolColumns();
+  const { schoolsById, fetchSchools } = useDeveloperStore();
+  const { isLoading } = useQuery({
+    queryKey: ['schools'],
+    queryFn: () => fetchSchools(),
+  });
+  const dataset = getSchoolDataset(schoolsById);
   return (
-    <MainWrapper
-      tobBar
-      headerSection={<div>Page header</div>}
-      actionSection={<div>page action</div>}
-    >
-      <div className="h-full">Welcome to page body</div>
+    <MainWrapper tobBar headerSection={<div>All Schools</div>}>
+      <DataGrid header={columns} dataset={dataset} isLoading={isLoading} />
     </MainWrapper>
   );
 }
