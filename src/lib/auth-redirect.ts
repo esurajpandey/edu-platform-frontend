@@ -1,4 +1,4 @@
-import { APP_ROUTES } from '@/constants/app-routes';
+import { APP_ROUTES } from '@/constants/routes';
 
 export function getHomeRouteForSystemRole(systemRole?: string | null) {
   if (systemRole?.toUpperCase() === 'DEVELOPER') {

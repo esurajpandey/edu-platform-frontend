@@ -98,7 +98,6 @@ export default function Login() {
                   <p className="text-sm text-textLight">School management workspace</p>
                 </div>
               </div>
-
               <div className="mb-5 rounded-[22px] border border-primary/15 bg-primary/5 px-4 py-3 lg:hidden">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
                   Welcome Back
@@ -107,7 +106,6 @@ export default function Login() {
                   Sign in to manage schools, access, communication, and daily workflows.
                 </p>
               </div>
-
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <h2 className="text-xl font-semibold tracking-tight text-text sm:text-2xl lg:text-3xl">
@@ -121,38 +119,30 @@ export default function Login() {
                   Secure login
                 </span>
               </div>
-
               <form className="mt-6 space-y-4 lg:mt-7 lg:space-y-5" onSubmit={handleLogin}>
                 <InputBox
                   id="userId"
                   type="text"
-                  label="User ID"
-                  placeholder="Enter your user ID"
+                  label="Username or Email ID"
+                  placeholder="Enter your username or email id"
                   variant="filled"
+                  size="large"
+                  required
                   value={userId}
                   onChange={(event) => setUserId(event.target.value)}
                   error={error ? ' ' : undefined}
                 />
 
                 <div>
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="text-sm font-medium text-text lg:text-[15px]">Password</span>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      tone="primary"
-                      size="small"
-                      className="min-h-0 px-0 text-sm font-medium lg:text-[15px]"
-                    >
-                      Forgot password?
-                    </Button>
-                  </div>
                   <InputBox
                     id="password"
+                    label="Password"
+                    required
                     type="password"
                     placeholder="Enter your password"
                     variant="filled"
                     className="mt-1.5"
+                    size="large"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     error={error ? error : undefined}
@@ -164,9 +154,8 @@ export default function Login() {
                   <span className="text-xs text-textMuted">Protected session</span>
                 </div>
 
-                <Button type="submit" reaponsive size="large" label="Sign in" />
+                <Button type="submit" size="medium" label="Sign in" tone="primary" radius="md" />
               </form>
-
               <div className="mt-5 rounded-[22px] border border-surfaceSoft bg-base px-4 py-3 lg:px-5 lg:py-4">
                 <div className="flex items-start gap-3">
                   <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">

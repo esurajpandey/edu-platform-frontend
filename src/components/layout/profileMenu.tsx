@@ -87,7 +87,7 @@ export default function DeveloperProfileMenu({
       {isOpen ? (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+0.7rem)] z-20 min-w-[220px] overflow-hidden rounded-[22px] border border-surfaceSoft bg-surface p-2 shadow-xl"
+          className="absolute right-0 top-[calc(100%+0.7rem)] z-50 min-w-[220px] overflow-hidden rounded-[22px] border border-surfaceSoft bg-surface p-2 shadow-xl"
         >
           <div className="border-b border-surfaceSoft px-3 py-3">
             <p className="text-sm font-semibold text-text">{userName}</p>

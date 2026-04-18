@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { Holiday } from '@/components/ui/DateInput';
 import SelectInput from '@/components/ui/SelectInput';
 import Button from '@/components/ui/Button';
-import DataGrid from '@/components/ui/DataGrid';
+import DataGrid from '@/components/DataGrid';
 import InputBox from '@/components/ui/InputBox';
 
-import { GridColumn } from '@/components/ui/DataGrid/type';
-import { GRID_COLUMN_TYPE } from '@/components/ui/DataGrid/config';
+import { GridColumn } from '@/components/DataGrid/type';
+import { GRID_COLUMN_TYPE } from '@/components/DataGrid/config';
 export default function ShowCasePage() {
   const [date, setDate] = useState<Date | null>(new Date());
   const onDateChange = (event: Date | null) => {

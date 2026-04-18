@@ -1,6 +1,6 @@
 import { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { getAccessToken, useAuthStore } from '@/store/auth/auth.store';
-import { APP_ROUTES } from '@/constants/app-routes';
+import { APP_ROUTES } from '@/constants/routes';
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }

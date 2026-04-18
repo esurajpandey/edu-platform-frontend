@@ -1,8 +1,7 @@
-import { APP_ROUTES } from '@/constants/app-routes';
+import { APP_ROUTES } from '@/constants/routes';
 import { ProfileAction, UtilityAction } from './layout.type';
 
 export const UtilityActions: UtilityAction[] = [
-  { label: 'Search', icon: 'search' },
   { label: 'Help', icon: 'help' },
   { label: 'Alerts', icon: 'notification' },
 ];

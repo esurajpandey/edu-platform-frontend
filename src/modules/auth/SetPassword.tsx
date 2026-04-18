@@ -6,7 +6,7 @@ import appToast from '@/lib/toast';
 import { useAuthStore } from '@/store/auth/auth.store';
 import constants from '@/constants';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { APP_ROUTES } from '@/constants/app-routes';
+import { APP_ROUTES } from '@/constants/routes';
 
 export default function SetPassword() {
   const [password, setPassword] = useState('');

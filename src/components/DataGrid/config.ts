@@ -53,8 +53,8 @@ export const getColumnDef = (header: GridColumn[], showSequence: boolean = true)
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getTransformData = (data: any[], showSequence: boolean = true) => {
-  return data.map((item, index: number) => {
+export const getTransformData = (data: any[] = [], showSequence: boolean = true) => {
+  return data?.map((item, index: number) => {
     return {
       _id: item?._id ?? item?.id ?? createUniqueId(),
       ...(showSequence && { _sNo: index + 1 }),

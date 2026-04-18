@@ -1,5 +1,5 @@
 import { MenuItem } from '@/components/layout/layout.type';
-import { APP_ROUTES } from './app-routes';
+import { APP_ROUTES } from './routes';
 export const getMenuList = (systemRole: string): MenuItem[] => {
   const developer: MenuItem[] = [
     {
