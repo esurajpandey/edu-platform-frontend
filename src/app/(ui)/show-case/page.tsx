@@ -1,11 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 import DateInput from '@/components/ui/DateInput';
 import { useState } from 'react';
 import { Holiday } from '@/components/ui/DateInput';
 import SelectInput from '@/components/ui/SelectInput';
 import Button from '@/components/ui/Button';
-
+import DataGrid from '@/components/ui/DataGrid';
 import InputBox from '@/components/ui/InputBox';
+
+import { GridColumn } from '@/components/ui/DataGrid/type';
+import { GRID_COLUMN_TYPE } from '@/components/ui/DataGrid/config';
 export default function ShowCasePage() {
   const [date, setDate] = useState<Date | null>(new Date());
   const onDateChange = (event: Date | null) => {
@@ -37,12 +41,56 @@ export default function ShowCasePage() {
     setSelectValue(value);
   };
 
+  const columns: GridColumn[] = [
+    {
+      field: 'name',
+      type: GRID_COLUMN_TYPE.STRING,
+      label: 'Name',
+      width: 250,
+      editable: true,
+    },
+    {
+      field: 'age',
+      type: GRID_COLUMN_TYPE.NUMBER,
+      label: 'Age',
+      width: 120,
+      editable: false,
+    },
+    {
+      field: 'email',
+      type: GRID_COLUMN_TYPE.STRING,
+      label: 'Email',
+      width: 250,
+      editable: true,
+    },
+    {
+      field: 'salary',
+      type: GRID_COLUMN_TYPE.NUMBER,
+      label: 'Salary',
+      width: 120,
+      editable: true,
+    },
+  ];
+
+  const getDataSet = () => {
+    const dataSet: unknown[] = [];
+    for (let i = 0; i < 1000; i++) {
+      dataSet.push({
+        name: `Name ${i}`,
+        age: i,
+        email: `stark${i}@gmail.com`,
+        salary: i * 1000,
+      });
+    }
+    return dataSet;
+  };
+
   return (
     <div className="h-full w-full">
       <div id="date-portal"></div>
       <h1 className="px-6 py-2 font-bold text-lg bg-primaryLight">UI Showcase</h1>
       <div className="flex flex-col p-8 w-full gap-4" style={{ height: 'calc(100dvh - 50px)' }}>
-        <DateInput
+        {/* <DateInput
           label="Select Date"
           required
           disabled
@@ -73,7 +121,8 @@ export default function ShowCasePage() {
           size="large"
           placeholder="Welcome to input"
           required
-        />
+        /> */}
+        <DataGrid header={columns} dataset={getDataSet()} />
       </div>
     </div>
   );

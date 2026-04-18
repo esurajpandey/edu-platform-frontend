@@ -1,5 +1,5 @@
 import { IconName, IconSize } from './icon.types';
-export type ControlRadius = 'md' | 'lg' | 'xl' | 'full';
+export type ControlRadius = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
 export type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'soft';
 export type ButtonTone = 'primary' | 'neutral' | 'danger';
 export type InputVariant = 'default' | 'filled';

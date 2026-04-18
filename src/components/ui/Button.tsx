@@ -75,7 +75,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
     size = 'medium',
     variant = 'solid',
     tone = 'primary',
-    radius = 'md',
+    radius = 'sm',
     reaponsive = false,
     leadingIcon,
     trailingIcon,
