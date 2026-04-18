@@ -9,12 +9,19 @@ export function proxy(request: NextRequest) {
 
   const cookie = request.cookies.get('refreshToken');
   const { pathname } = request.nextUrl;
+
+  // Define public paths
   const isPublicPath = pathname === '/' || pathname === '/login';
-  console.log({ cookie, isPublicPath, pathname });
+
+  // Debugging log for Vercel logs
+  console.log(`Path: ${pathname} | HasCookie: ${!!cookie?.value}`);
+
+  // 1. If user has a token and tries to go to login -> send to dashboard
   if (cookie?.value && isPublicPath) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
+  // 2. If user has NO token and tries to go to protected route -> send to login
   if (!cookie?.value && !isPublicPath) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
