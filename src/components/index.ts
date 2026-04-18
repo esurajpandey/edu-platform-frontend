@@ -1,5 +1,6 @@
 export { default as Icon } from './Icon';
 export { default as EduPlatformLogo } from '../assets/logos/EduPlatformLogo';
+export { default as MainWrapper } from './MainWrapper/Index';
 export {
   Button,
   Checkbox,

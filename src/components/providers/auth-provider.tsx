@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { APP_ROUTES } from '@/constants/app-routes';
+import { APP_ROUTES } from '@/constants/routes';
 import { getHomeRouteForSystemRole, isProtectedAppPath } from '@/lib/auth-redirect';
 import { useAuthStore } from '@/store/auth/auth.store';
 import { Loader } from '@/components';

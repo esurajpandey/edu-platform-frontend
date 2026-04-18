@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { APP_ROUTES } from '@/constants/app-routes';
+import { APP_ROUTES } from '@/constants/routes';
 import Link from 'next/link';
 import { EduPlatformLogo, Icon } from '@/components';
 import { cn } from '@/lib/cn';

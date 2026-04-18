@@ -1,6 +1,6 @@
 'use client';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
-import { APP_ROUTES } from '@/constants/app-routes';
+import { APP_ROUTES } from '@/constants/routes';
 import { usePathname, useRouter } from 'next/navigation';
 import { getMenuList } from '../constants/project.menu';
 import { Header, MobileDrawer, Sidebar, ProfileActions, UtilityActions } from '@/components/layout';
@@ -60,6 +60,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       if (action.label === 'Logout') {
         await logout();
         router.replace(APP_ROUTES.login);
+        return;
       }
     },
   }));
@@ -89,8 +90,8 @@ export default function Layout({ children }: { children: ReactNode }) {
             userTitle={userTitle}
           />
 
-          <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 py-5 lg:px-8 lg:py-8">
-            <div className="mx-auto max-w-[1280px]">{children}</div>
+          <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-1">
+            <div className="mx-auto max-w-[1280px] h-full">{children}</div>
           </main>
         </div>
       </div>
