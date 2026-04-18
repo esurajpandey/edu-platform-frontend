@@ -68,24 +68,36 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
   ) => {
     const id = useId();
     const containerRef = useRef<HTMLDivElement>(null);
-    const [inputValue, setInputValue] = useState('');
+
+    // 1. Memoize the selected item
+    const selectedItem = useMemo(
+      () => options.find((opt) => opt.value === value) || null,
+      [options, value],
+    );
+
+    // 2. Initialize state using a function to avoid unnecessary recalculations on mount
+    const [inputValue, setInputValue] = useState(() => selectedItem?.label ?? '');
+    const [isTyping, setIsTyping] = useState(false);
     const [coords, setCoords] = useState({
       top: 0,
       left: 0,
       width: 0,
       isBottom: true,
     });
-    const [isTyping, setIsTyping] = useState(false);
 
-    const selectedItem = useMemo(
-      () => options.find((opt) => opt.value === value) || null,
-      [options, value],
-    );
+    // 3. Sync local state when 'value' prop changes externally
+    // Added a check to prevent cascading renders: only update if the label actually changed
+    useLayoutEffect(() => {
+      const newLabel = selectedItem?.label ?? '';
+      if (!isTyping && inputValue !== newLabel) {
+        setInputValue(newLabel);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedItem, isTyping]);
 
-    // ✅ Filter ONLY when typing
+    // ✅ Filter logic preserved
     const filteredItems = useMemo(() => {
       if (!isTyping || !inputValue) return options;
-
       return options.filter((item) => item.label.toLowerCase().includes(inputValue.toLowerCase()));
     }, [options, inputValue, isTyping]);
 
@@ -111,32 +123,28 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
       selectedItem,
       inputValue,
       defaultHighlightedIndex: 0,
-      onInputValueChange: ({ inputValue, type }) => {
+      onInputValueChange: ({ inputValue: newInputValue, type }) => {
         if (type === useCombobox.stateChangeTypes.InputChange) {
           setIsTyping(true);
-          setInputValue(inputValue ?? '');
+          setInputValue(newInputValue ?? '');
         }
       },
-
-      onSelectedItemChange: ({ selectedItem }) => {
-        handleChange(selectedItem);
-
-        // ✅ stop filtering after selection
+      onSelectedItemChange: ({ selectedItem: newSelectedItem }) => {
+        handleChange(newSelectedItem);
         setIsTyping(false);
-        setInputValue(selectedItem?.label ?? '');
+        setInputValue(newSelectedItem?.label ?? '');
       },
     });
 
+    // ✅ Positioning logic preserved
     useLayoutEffect(() => {
       if (!isOpen) return;
 
       const updatePosition = () => {
         if (!containerRef.current) return;
-
         const rect = containerRef.current.getBoundingClientRect();
         const spaceBelow = window.innerHeight - rect.bottom;
         const menuHeight = 256;
-
         const shouldShowAbove = spaceBelow < menuHeight && rect.top > menuHeight;
 
         setCoords({
@@ -150,7 +158,6 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
       updatePosition();
       window.addEventListener('scroll', updatePosition);
       window.addEventListener('resize', updatePosition);
-
       return () => {
         window.removeEventListener('scroll', updatePosition);
         window.removeEventListener('resize', updatePosition);
@@ -160,10 +167,15 @@ const SelectInput = forwardRef<HTMLInputElement, SelectInputProps>(
     const inputProps = getInputProps({
       placeholder,
       disabled,
-      onBlur: () => onBlur?.(),
+      onBlur: () => {
+        setIsTyping(false);
+        onBlur?.();
+      },
     }) as ReturnType<typeof getInputProps> & {
       ref?: React.Ref<HTMLInputElement>;
     };
+
+    // suppressRefError handles the portal/conditional rendering warning
     const menuProps = getMenuProps({}, { suppressRefError: true });
 
     return (
