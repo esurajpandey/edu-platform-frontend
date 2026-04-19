@@ -1,8 +1,13 @@
+/* eslint-disable no-console */
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { cookies } from 'next/headers';
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const cookie = request.cookies.get('refreshToken');
+  const cookieStore = await cookies();
+
+  console.log({ cookieStore });
   const { pathname } = request.nextUrl;
   const isPublicPath = pathname === '/' || pathname === '/login';
 
