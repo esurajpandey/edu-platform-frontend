@@ -7,7 +7,11 @@ export async function proxy(request: NextRequest) {
   const cookie = request.cookies.get('refreshToken');
   const cookieStore = await cookies();
 
-  console.log({ cookieStore, request });
+  console.log({
+    cookieStore: cookieStore.get('refreshToken'),
+    request: request.cookies.get('refreshToken'),
+    cookie: request.cookies,
+  });
   const { pathname } = request.nextUrl;
   const isPublicPath = pathname === '/' || pathname === '/login';
 
